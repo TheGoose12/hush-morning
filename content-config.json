@@ -1,0 +1,155 @@
+{
+  "app": {
+    "title": "Home Drip Session",
+    "subtitle": "November Member Notes",
+    "audio": {
+      "file": "Nov-Hush-Vox.m4a",
+      "duration": "1:35"
+    },
+    "userPhoto": "user-photo.jpg",
+    "vinylBackground": "record-bg.png",
+    "logo": "hush-logo-black.svg"
+  },
+  "homeScreen": {
+    "startButton": {
+      "text": "Start"
+    },
+    "messages": [
+      {
+        "type": "text",
+        "content": "Hi hello! This is an audio message from Adam and Ron."
+      },
+      {
+        "type": "audio",
+        "duration": "1:35"
+      }
+    ]
+  },
+  "coffees": [
+    {
+      "id": "regular",
+      "label": "Regular But Better",
+      "name": "Hush Blend",
+      "origin": "Colombian/Guatemalan",
+      "originBrief": "Colombian/Guatemalan",
+      "notesBrief": "Chocolate-Covered Hazelnut • Caramel • Balanced Body",
+      "heroImage": "assets/regular-bg.jpeg",
+      "backgroundImage": "assets/regular-bg.jpeg",
+      "descriptors": ["Chocolate-Covered Hazelenut", "Carmael", "Balanced Body"],
+      "details": {
+        "subtitle": "Two coffee origins, one quiet moment in your mug.",
+        "description": "Made for balance and a touch of sweetness. We pull together our favorite fresh-harvest coffees from Central + South America to create a cup that’s smooth, gently bright, and easy to love.",
+        "characteristics": {
+          "Processing": "Washed",
+          "Altitude": "Various",
+          "Varietals": "Bourbon, Castillo, Catuai, Caturra, Colombia",
+          "Flavor Notes": "Chocolate-Covered Hazelenut, Carmael, Balanced Body"
+        },
+         "story": "This blend comes from two neighbors in the mountains—different paths, same mission.\n\nFirst, there’s Bochica, Colombia.\nGrown high in Huila, Cauca, Nariño, and Tolima, it’s tended by small-scale farmers who still handpick ripe cherries one by one. They wash and rest the coffee for a day or so—26 to 36 quiet hours—before drying. It’s careful, patient work. The result is coffee with a gentle brightness and calm sweetness.\n\nThen, there’s ASDECAFE from Guatemala.\nA younger collective—more than 1,000 growers—spread across Huehuetenango and El Quiché. By joining forces, they share the cost of moving coffee down the mountain and up through certification. Together, they can earn more, learn more, and grow better.\n\nWe bring these two coffees together—Colombia’s steady, hands-on tradition and Guatemala’s shared strength—to land in a sweet, balanced cup.\n\nBright meets smooth.\nCommunity meets craft.\nTwo origins, one quiet moment in your mug.\n\nSip slow."
+      },
+      "gallery": [
+        "assets/blend-1.jpg",
+        "assets/blend-2.jpg",
+        "assets/blend-3.jpg",
+        "assets/blend-4.jpg"
+      ]
+    },
+    {
+      "id": "aha",
+      "label": "Aha Coffee",
+      "name": "Costa Rica Natural – Finca Santa Rosa",
+      "origin": "From Single a Farmer Bryan Rivera",
+      "originBrief": "León Cortés Canton · Family farm ~4 hectares (≈10 acres) · Processed at Café de Altura de San Ramón",
+      "notesBrief": "Lemongrass • strawberry • lavender • cranberry • raspberry",
+      "heroImage": "assets/aha-bg.png",
+      "backgroundImage": "assets/aha-bg.png",
+      "descriptors": ["Lemongrass", "Strawberry", "Lavender", "Cranberry"],
+      "details": {
+        "subtitle": "Single-farmer microlot from a 10-acre family farm",
+        "description": "Brew slightly finer with a moderate dose on a flat-bottom dripper to highlight bright fruit and balanced sweetness.",
+        "characteristics": {
+          "Processing": "Natural (minimal intervention)",
+          "Altitude": "—",
+          "Varietals": "Bourbon",
+          "Flavor Notes": "Dark berries, blackberry lemonade, orange zest, hazelnut; plus lemongrass, strawberry, lavender, cranberry, raspberry"
+        },
+        "story": "In the Tarrazú mountains of Costa Rica, producer Bryan Rivera Ureña tends a small family farm—about four hectares—called Finca Santa Rosa. His Bourbon cherries are dried naturally with a light touch, letting the fruit lead.\n\nThe cup shows lush, structured fruit: dark berries, blackberry lemonade, orange zest, and a gentle hazelnut finish—lively as espresso and soft like a strawberry–plum milkshake with milk.\n\nCherry is cleaned and moved to greenhouse patios where slow, even airflow stretches drying to nearly a month. Once at ideal humidity, the coffee rests for at least six weeks to stabilize and deepen sweetness.\n\nOur roast approach stays steady and unhurried—less burner energy and extended drying/Maillard to unlock deeper fruit and caramel.\n\nBrew it a touch finer on a flat-bottom dripper with a moderate dose to catch the full expression.\n\nSip slow."
+      },
+      "gallery": [
+        "assets/aha-1.jpg",
+        "assets/aha-2.jpg",
+        "assets/aha-3.jpg"
+      ]
+    }
+  ],
+  "community": {
+    "enabled": false,
+    "title": "Community Spotlight",
+    "member": {
+      "name": "Whitney Main stay",
+      "role": "Visual Storyteller",
+      "photo": "https://images.unsplash.com/photo-1494790108755-2616c35ecbb5?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",
+      "description": "Documents coffee community stories with her creative lens.",
+      "stat": {
+        "icon": "📸",
+        "text": "Captured 200+ coffee stories"
+      },
+      "instagramButton": "View Instagram",
+      "showcaseImage": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+    }
+  },
+  "events": {
+    "enabled": true,
+    "title": "Monthly Highlights",
+    "subtitle": "A lot happens outside Instragram.",
+    "gallery": [
+      "assets/recap/recap-1.jpeg",
+      "assets/recap/recap-2.jpeg",
+      "assets/recap/recap-3.jpeg",
+      "assets/recap/recap-4.jpeg",
+      "assets/recap/recap-5.jpeg"
+    ],
+    "stats": [
+      {
+        "number": "110",
+        "label": "Members"
+      },
+      {
+        "number": "5",
+        "label": "Origins"
+      },
+      {
+        "number": "6",
+        "label": "Events"
+      }
+    ],
+    "seeMoreButton": "See More",
+    "modal": {
+      "title": "Event",
+      "subtitle": "Highlights from our monthly gathering",
+      "details": {
+        "Date": "November 15, 2024",
+        "Location": "Hush Coffee Roastery",
+        "Duration": "3 hours",
+        "Participants": "24 members",
+        "Coffees Tasted": "6 origins",
+        "Top Score": "88 points (Ethiopian Yirgacheffe)"
+      },
+      "highlights": {
+        "title": "Event Highlights",
+        "description": "Our monthly cupping brought together coffee enthusiasts to explore six distinct origins. The Ethiopian Yirgacheffe stood out with its exceptional floral notes and bright acidity, earning our highest score of the evening."
+      },
+      "nextEvent": {
+        "title": "Next Event",
+        "description": "Join us December 20th for our holiday cupping featuring seasonal blends and limited editions from our partner farms."
+      }
+    }
+  },
+  "spotify": {
+    "title": "Coffee Vibes",
+    "subtitle": "Your Monthly Playlist",
+
+    "embedUrl": "https://open.spotify.com/embed/playlist/1lfFTml29LrKNiTTfpsAjR?utm_source=generator&theme=0&autoplay=1",
+    "playButton": "▶ Tap to Play Spotify"
+  }
+}

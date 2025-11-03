@@ -1,0 +1,3544 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>Coffee Membership Monthly Recap</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #000000;
+            color: #2F1B14;
+            overflow-x: hidden;
+            min-height: 100vh;
+            position: relative;
+            margin: 0;
+            padding: 0;
+            transition: all 3s ease-in-out;
+        }
+        
+        body.gradient-active {
+            background: linear-gradient(45deg, #2D1B69 0%, #11998E 25%, #F7931E 50%, #FFD700 75%, #FF6B6B 100%);
+            background-size: 400% 400%;
+            animation: sunriseGradient 30s ease-in-out infinite;
+        }
+
+        @keyframes sunriseGradient {
+            0% { background-position: 0% 50%; }
+            25% { background-position: 100% 50%; }
+            50% { background-position: 100% 100%; }
+            75% { background-position: 50% 100%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .app-container {
+            min-height: 100vh;
+            width: 100vw;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        .sections-container {
+            display: flex;
+            min-height: 100vh;
+            width: 600%;
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .section {
+            width: 16.666%;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+            padding: 0;
+            position: relative;
+            background: transparent;
+            overflow: hidden;
+        }
+
+        /* Instagram Stories Style Progress Bar */
+        .progress-container {
+            position: fixed;
+            top: 12px;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            display: flex;
+            gap: 4px;
+            padding: 0 16px;
+            z-index: 100;
+            background: transparent;
+        }
+        
+        /* Mini Navigation Buttons */
+        .mini-nav-container {
+            position: fixed;
+            top: 24px;
+            left: 16px;
+            display: flex;
+            gap: 8px;
+            z-index: 101;
+        }
+        
+        .mini-nav-btn {
+            width: 32px;
+            height: 32px;
+            background: rgba(255, 255, 255, 0.15);
+            border: none;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            color: white;
+            font-size: 14px;
+        }
+        
+        .mini-nav-btn:hover {
+            background: rgba(255, 255, 255, 0.25);
+            transform: scale(1.1);
+        }
+        
+        .mini-nav-btn:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .mini-nav-btn:disabled:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: none;
+        }
+
+        .progress-segment {
+            flex: 1;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 1.5px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .progress-segment.completed {
+            background: #fff;
+        }
+
+        .progress-segment.active {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .progress-segment.active::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            background: #fff;
+            width: 0;
+            animation: progressFill 5s linear forwards;
+        }
+
+        @keyframes progressFill {
+            to { width: 100%; }
+        }
+
+        /* Mini Pause/Play Button */
+        .mini-play-button {
+            width: 32px;
+            height: 32px;
+            background: rgba(255, 255, 255, 0.15);
+            border: none;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            opacity: 0;
+            visibility: hidden;
+            font-size: 12px;
+            color: white;
+        }
+        
+        .mini-play-button.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .mini-play-button:hover {
+            background: rgba(255, 255, 255, 0.25);
+            transform: scale(1.1);
+        }
+
+        .section-content.month {
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .hero-image {
+            width: 100%;
+            height: 40vh;
+            object-fit: cover;
+            position: relative;
+        }
+
+        .section-content {
+            padding: 1rem 1.5rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+            text-align: center;
+            max-width: 350px;
+            width: 100%;
+            padding-top: 4rem;
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: #FFF;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .section-subtitle {
+            font-size: 1rem;
+            margin-bottom: 2rem;
+            color: rgba(255, 255, 255, 0.9);
+            line-height: 1.5;
+        }
+
+        /* Section 1: Voice Memo - Vinyl Style */
+        .voice-memo {
+            background: transparent;
+            justify-content: flex-start;
+            padding: 1rem 1rem 2rem 1rem;
+            min-height: 100vh;
+            overflow: visible;
+            transition: padding-bottom 0.8s ease;
+        }
+        
+        .voice-memo.player-visible {
+            padding-bottom: 200px; /* Space for audio controls when visible */
+        }
+
+        .vinyl-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 2rem 0;
+            width: 100%;
+        }
+
+        .vinyl-record {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            background: url('record-bg.png') center/cover;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1rem;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+            overflow: hidden;
+        }
+        
+        .vinyl-record::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border-radius: 50%;
+            background: url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200"%3E%3Cdefs%3E%3CradialGradient id="vinylGrad" cx="50%25" cy="50%25" r="50%25"%3E%3Cstop offset="0%25" style="stop-color:%23404040;stop-opacity:1" /%3E%3Cstop offset="60%25" style="stop-color:%23262626;stop-opacity:1" /%3E%3Cstop offset="100%25" style="stop-color:%23101010;stop-opacity:1" /%3E%3C/radialGradient%3E%3C/defs%3E%3Ccircle cx="100" cy="100" r="100" fill="url(%23vinylGrad)"/%3E%3Ccircle cx="100" cy="100" r="90" fill="none" stroke="rgba(0,0,0,0.2)" stroke-width="0.5"/%3E%3Ccircle cx="100" cy="100" r="75" fill="none" stroke="rgba(0,0,0,0.2)" stroke-width="0.5"/%3E%3Ccircle cx="100" cy="100" r="60" fill="none" stroke="rgba(0,0,0,0.2)" stroke-width="0.5"/%3E%3Ccircle cx="100" cy="100" r="45" fill="none" stroke="rgba(0,0,0,0.2)" stroke-width="0.5"/%3E%3Ccircle cx="100" cy="100" r="30" fill="none" stroke="rgba(0,0,0,0.2)" stroke-width="0.5"/%3E%3Ccircle cx="100" cy="100" r="20" fill="%23000000"/%3E%3Ccircle cx="100" cy="100" r="4" fill="%23000000"/%3E%3C/svg%3E') center/cover;
+            pointer-events: none;
+        }
+        
+        .vinyl-record::after {
+            content: '';
+            position: absolute;
+            width: 60px;
+            height: 42px;
+            background-image: url('hush-logo-black.svg');
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            filter: invert(1) drop-shadow(0 2px 4px rgba(0,0,0,0.8));
+            z-index: 1;
+        }
+
+        .vinyl-record.spinning {
+            animation: spin 3s linear infinite;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .track-info {
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+        
+        /* Text Message Bubbles */
+        .message-container {
+            width: calc(100% - 3rem);
+            max-width: 320px;
+            margin: 1rem 1.5rem 2rem 1.5rem;
+            padding: 0;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.5s ease;
+            overflow: visible;
+        }
+        
+        .message-container.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .message-row {
+            display: flex;
+            align-items: flex-end;
+            margin-bottom: 12px;
+            gap: 8px;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.4s ease;
+        }
+        
+        .message-row.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .user-photo {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            object-fit: cover;
+            flex-shrink: 0;
+        }
+        
+        .text-bubble {
+            background: #007AFF;
+            color: white;
+            padding: 12px 16px;
+            border-radius: 18px 18px 18px 4px;
+            max-width: calc(100% - 50px);
+            font-size: 0.95rem;
+            line-height: 1.4;
+            box-shadow: 0 2px 8px rgba(0, 123, 255, 0.3);
+            position: relative;
+        }
+        
+        .text-bubble::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: -7px;
+            width: 0;
+            height: 0;
+            border-style: solid;
+            border-width: 0 8px 8px 0;
+            border-color: transparent #007AFF transparent transparent;
+        }
+        
+        
+        .audio-bubble {
+            background: #007AFF;
+            color: white;
+            padding: 10px 12px;
+            border-radius: 18px 18px 18px 4px;
+            max-width: calc(100% - 50px);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            box-shadow: 0 2px 8px rgba(0, 123, 255, 0.3);
+            position: relative;
+        }
+        
+        .audio-bubble::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: -7px;
+            width: 0;
+            height: 0;
+            border-style: solid;
+            border-width: 0 8px 8px 0;
+            border-color: transparent #007AFF transparent transparent;
+        }
+        
+        
+        .audio-play-icon {
+            width: 32px;
+            height: 32px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 14px;
+            flex-shrink: 0;
+            cursor: pointer;
+            transition: background 0.2s ease;
+            line-height: 1;
+            text-align: center;
+        }
+        
+        .audio-play-icon:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.05);
+        }
+        
+        .audio-play-icon.playing {
+            animation: subtle-pulse 1.5s ease-in-out infinite;
+        }
+        
+        @keyframes subtle-pulse {
+            0%, 100% { 
+                transform: scale(1);
+                opacity: 1;
+            }
+            50% { 
+                transform: scale(1.05);
+                opacity: 0.9;
+            }
+        }
+        
+        .audio-waveform-mini {
+            flex: 1;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+            margin: 0 6px;
+            min-width: 0;
+            max-width: 150px;
+            overflow: hidden;
+        }
+        
+        .waveform-bar {
+            width: 3px;
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 1.5px;
+            transition: height 0.1s ease;
+        }
+        
+        .waveform-bar.active {
+            background: rgba(255, 255, 255, 1);
+        }
+        
+        .audio-duration {
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.8);
+            font-weight: 500;
+            flex-shrink: 0;
+            min-width: 40px;
+            padding-right: 3px;
+        }
+
+        .track-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #FFF;
+            margin-bottom: 0.5rem;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .track-artist {
+            font-size: 1rem;
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 2rem;
+        }
+
+        /* Edge-to-edge audio controls */
+        .audio-controls-container {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.35);
+            backdrop-filter: blur(10px);
+            padding: 0.75rem 0;
+            z-index: 102;
+            display: block;
+            opacity: 0;
+            transform: translateY(100%);
+            transition: all 0.8s ease;
+        }
+
+        .audio-controls-container.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* Hide the bottom waveform */
+        .audio-waveform {
+            display: none;
+        }
+
+        .audio-waveform {
+            width: 100%;
+            height: 60px;
+            display: none !important;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1rem;
+            padding: 0;
+            background: transparent;
+        }
+
+        .waveform-canvas {
+            width: 100%;
+            height: 60px;
+            background: transparent;
+        }
+
+        .playback-controls {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            padding: 0 1rem;
+        }
+
+        .control-button {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: #FFF;
+            font-size: 1.2rem;
+            transition: all 0.2s ease;
+        }
+
+        .control-button:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(1.1);
+        }
+
+        .play-button {
+            width: 60px;
+            height: 60px;
+            background: #FFF;
+            color: #000;
+            font-size: 1.5rem;
+        }
+
+        .time-display {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.8rem;
+            min-width: 40px;
+            text-align: center;
+        }
+        
+        .controls-center {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .start-button {
+            background: linear-gradient(135deg, #11998E, #FFD700);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 25px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: -200px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            position: relative;
+            z-index: 10;
+            width: 220px;
+        }
+
+        .start-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
+
+        .start-button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        
+        .start-button.fade-out {
+            opacity: 0;
+            transform: scale(0.8);
+            pointer-events: none;
+        }
+
+        /* Section 2 & 3: Featured Coffees with Progressive Animation */
+        .coffee-section {
+            background: transparent;
+            overflow: hidden;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+        
+        .coffee-section .section-content {
+            max-height: 100vh;
+            overflow: hidden;
+            padding: 0;
+            flex: 1;
+            position: relative;
+        }
+        
+        .coffee-hero {
+            width: 100%;
+            height: 100vh;
+            object-fit: cover;
+            display: block;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 1;
+        }
+        
+        /* Coffee Journey Slideshow */
+        .coffee-journey {
+            position: absolute;
+            top: 110px;
+            left: 1rem;
+            right: 1rem;
+            width: calc(100% - 2rem);
+            height: calc(35vh - 20px);
+            z-index: 2;
+            overflow: hidden;
+            opacity: 0;
+            transition: opacity 1s ease;
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+        }
+        
+        .coffee-journey.animate-in {
+            opacity: 1;
+        }
+        
+        .journey-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            position: absolute;
+            top: 0;
+            left: 0;
+            opacity: 0;
+            transition: opacity 1s ease;
+        }
+        
+        .journey-image.active {
+            opacity: 1;
+        }
+        
+        
+        
+        .coffee-overlay {
+            display: none;
+        }
+        
+        .coffee-title-section {
+            position: absolute;
+            bottom: 8.625rem;
+            left: 1.5rem;
+            right: 1.5rem;
+            z-index: 3;
+            pointer-events: none;
+        }
+        
+        .coffee-title-section .coffee-header,
+        .coffee-title-section .coffee-details {
+            pointer-events: auto;
+        }
+        
+        .coffee-header {
+            margin-bottom: 0.5rem;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .coffee-header.animate-in {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .coffee-label {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #FFD700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 0.5rem;
+        }
+        
+        .coffee-name {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: #FFF;
+            margin-bottom: 1rem;
+            text-shadow: 0 2px 8px rgba(0,0,0,0.5);
+        }
+        
+        .coffee-details {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1) 0.3s;
+        }
+        
+        .coffee-details.animate-in {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .coffee-origin-brief {
+            font-size: 1rem;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 1rem;
+        }
+        
+        .coffee-notes-brief {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .note-brief {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            color: #FFF;
+            backdrop-filter: blur(10px);
+        }
+        
+        .see-details-btn {
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border-radius: 25px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            opacity: 0;
+            transform: translateY(20px);
+            align-self: flex-start;
+        }
+        
+        .see-details-btn.animate-in {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .see-details-btn:hover {
+            background: rgba(255, 255, 255, 0.25);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+        
+        /* Coffee Visual Effects */
+        .coffee-effects {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 3;
+        }
+        
+        .steam-animation {
+            position: absolute;
+            top: 20%;
+            right: 10%;
+            width: 60px;
+            height: 80px;
+            opacity: 0;
+            transition: opacity 1s ease 2s;
+        }
+        
+        .steam-animation.animate-in {
+            opacity: 0.6;
+        }
+        
+        .steam-line {
+            position: absolute;
+            width: 3px;
+            background: linear-gradient(to top, transparent, rgba(255,255,255,0.4), transparent);
+            border-radius: 50px;
+            animation: steam 3s ease-in-out infinite;
+        }
+        
+        .steam-line:nth-child(1) {
+            left: 20px;
+            height: 60px;
+            animation-delay: 0s;
+        }
+        
+        .steam-line:nth-child(2) {
+            left: 30px;
+            height: 50px;
+            animation-delay: 0.5s;
+        }
+        
+        .steam-line:nth-child(3) {
+            left: 40px;
+            height: 70px;
+            animation-delay: 1s;
+        }
+        
+        @keyframes steam {
+            0% { transform: translateY(0) scaleX(1); opacity: 0; }
+            10% { opacity: 0.6; }
+            90% { opacity: 0.6; }
+            100% { transform: translateY(-30px) scaleX(1.5); opacity: 0; }
+        }
+        
+        /* Detailed View Modal */
+        .coffee-details-modal {
+            position: fixed !important;
+            top: 0 !important;
+            left: 0 !important;
+            width: 100vw !important;
+            height: 100vh !important;
+            background: rgba(20, 20, 20, 0.98);
+            z-index: 9999;
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+            transition: all 0.3s ease;
+            overflow-y: auto;
+            overflow-x: hidden;
+            -webkit-overflow-scrolling: touch;
+            transform: none !important;
+        }
+        
+        .coffee-details-modal.active {
+            opacity: 1;
+            visibility: visible;
+            pointer-events: auto;
+        }
+        
+        .coffee-details-modal .section-content {
+            color: white !important;
+            padding: 40px 30px !important;
+            max-width: 600px;
+            width: 90%;
+            margin: 0;
+            position: absolute !important;
+            left: 50% !important;
+            top: 50% !important;
+            transform: translate(-50%, -50%) !important;
+            /*background: #000000;*/
+            border-radius: 15px;
+            max-height: 85vh;
+            overflow-y: auto;
+            display: block !important;
+            z-index: 10002 !important;
+            opacity: 1 !important;
+            visibility: visible !important;
+            /*box-shadow: 0 20px 40px rgba(0,0,0,0.8);*/
+        }
+
+        .coffee-details-modal  .section-content div {
+            background: #1f1f1f !important;
+        }
+        
+        .coffee-details-modal h2 {
+            color: #FFD700 !important;
+            font-size: 28px !important;
+            margin-bottom: 10px !important;
+            display: block !important;
+            visibility: visible !important;
+        }
+        
+        .coffee-details-modal p {
+            color: white !important;
+            font-size: 16px !important;
+            line-height: 1.6 !important;
+            margin: 10px 0 !important;
+            display: block !important;
+            visibility: visible !important;
+        }
+        
+        .coffee-details-modal strong {
+            color: #f4d398 !important;
+            display: inline !important;
+            visibility: visible !important;
+        }
+
+        /* Ensure all modal content is visible */
+        .coffee-details-modal * {
+            visibility: visible !important;
+            opacity: 1 !important;
+        }
+        
+        .coffee-details-modal .section-title,
+        .coffee-details-modal .section-subtitle {
+            display: block !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+        }
+        
+        .details-close-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 10000;
+            background: #000;
+            border: 2px solid white;
+            color: #fff;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            font-size: 24px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.5);
+            transition: all 0.3s ease;
+            z-index: 10003;
+        }
+        
+        .details-close-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+
+
+        /* Section 4: Community Highlight */
+        .community-highlight {
+            background: #000000;
+            overflow-y: auto;
+            height: 100vh;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+            padding: 4rem 1.5rem 2rem 1.5rem;
+        }
+        
+        .community-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            max-width: 400px;
+            width: 100%;
+        }
+        
+        .member-circular-photo {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            overflow: hidden;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+            border: 3px solid #FFD700;
+        }
+        
+        .member-circular-photo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .community-title {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: #FFD700;
+            margin-bottom: 2rem;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.8s ease;
+        }
+        
+        .community-title.animate-in {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .member-name {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #FFF;
+            margin-bottom: 0.5rem;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.8s ease 0.2s;
+        }
+        
+        .member-name.animate-in {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .member-role {
+            font-size: 1.1rem;
+            color: #FFD700;
+            margin-bottom: 1.5rem;
+            font-weight: 500;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.8s ease 0.4s;
+        }
+        
+        .member-role.animate-in {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .instagram-btn {
+            background: linear-gradient(45deg, #405DE6, #5851DB, #833AB4, #C13584, #E1306C, #FD1D1D, #F56040, #F77737, #FCAF45, #FFDC80);
+            background-size: 200% 200%;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 25px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 1.5rem;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: instagram-gradient 3s ease infinite;
+        }
+        
+        .instagram-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(193, 53, 132, 0.4);
+        }
+        
+        .instagram-btn.animate-in {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        @keyframes instagram-gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        .member-description {
+            font-size: 1rem;
+            color: rgba(255, 255, 255, 0.9);
+            line-height: 1.5;
+            margin-bottom: 1.5rem;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.8s ease 0.6s;
+        }
+        
+        .member-description.animate-in {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .member-stat {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            font-size: 1rem;
+            color: #FFD700;
+            margin-bottom: 2rem;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.8s ease 0.8s;
+        }
+        
+        .member-stat.animate-in {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .stat-icon {
+            font-size: 1.2rem;
+        }
+        
+        .showcase-image {
+            width: 100%;
+            max-width: 300px;
+            height: 200px;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 12px 24px rgba(0,0,0,0.4);
+            opacity: 0;
+            transform: translateY(30px) scale(0.95);
+            transition: all 1s ease 0.8s;
+        }
+        
+        .showcase-image.animate-in {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+        
+        .showcase-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 4s ease;
+            animation: subtleZoom 8s ease-in-out infinite;
+        }
+        
+        @keyframes subtleZoom {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        
+        .community-header {
+            position: absolute;
+            top: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            text-align: center;
+            opacity: 0;
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 3;
+        }
+        
+        .community-header.animate-in {
+            opacity: 1;
+        }
+        
+        .community-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #FFD700;
+            margin-bottom: 0.3rem;
+        }
+        
+        .community-subtitle {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.8);
+            font-weight: 400;
+        }
+        
+        .member-profile {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1) 0.3s;
+        }
+        
+        .member-profile.animate-in {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        @keyframes memberPulse {
+            0%, 100% { 
+                box-shadow: 0 0 0 0 rgba(255, 215, 0, 0.4);
+            }
+            50% { 
+                box-shadow: 0 0 0 20px rgba(255, 215, 0, 0);
+            }
+        }
+        
+        .member-name {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #FFF;
+            margin-bottom: 0.5rem;
+        }
+        
+        .member-role {
+            font-size: 1rem;
+            color: #FFD700;
+            margin-bottom: 1.5rem;
+            font-weight: 500;
+        }
+        
+        
+        .highlight-icon {
+            width: 20px;
+            height: 20px;
+            background: #FFD700;
+            border-radius: 50%;
+            margin-right: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            color: #000;
+            font-weight: bold;
+        }
+        
+        .member-links {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+        }
+        
+        .member-link {
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+        
+        .member-link:hover {
+            background: rgba(255, 255, 255, 0.25);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+        
+        .gallery-indicator {
+            position: absolute;
+            top: 50%;
+            right: 1rem;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            z-index: 3;
+        }
+        
+        .gallery-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.4);
+            transition: all 0.3s ease;
+        }
+        
+        .gallery-dot.active {
+            background: #da7d13;
+            transform: scale(1.3);
+        }
+        
+        /* Section 5: Event Gallery with Progressive Display */
+        .event-gallery {
+            background: transparent;
+            overflow: hidden;
+            height: 100vh;
+            position: relative;
+        }
+
+        .gallery-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .gallery-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            position: absolute;
+            top: 0;
+            left: 0;
+            opacity: 0;
+            transition: opacity 1s ease;
+            animation: kenburns 8s ease-in-out infinite;
+        }
+
+        .gallery-image.active {
+            opacity: 1;
+        }
+
+        @keyframes kenburns {
+            0% { transform: scale(1) translate(0, 0); }
+            50% { transform: scale(1.1) translate(-2%, -2%); }
+            100% { transform: scale(1) translate(0, 0); }
+        }
+        
+        .event-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(180deg, rgba(0,0,0,0.4) 0%, transparent 30%, transparent 70%, rgba(0,0,0,0.8) 100%);
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 4rem 1.5rem 14.5rem;
+        }
+        
+        .event-title-container {
+            text-align: center;
+            opacity: 0;
+            transform: translateY(-30px);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .event-title-container.animate-in {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .event-main-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #FFF;
+            margin-bottom: 0.5rem;
+            text-shadow: 0 2px 8px rgba(0,0,0,0.5);
+        }
+        
+        .event-subtitle {
+            font-size: 1.1rem;
+            color: rgba(255, 255, 255, 0.9);
+            font-weight: 400;
+        }
+        
+        .event-stats {
+            display: flex;
+            justify-content: space-around;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(15px);
+            border-radius: 20px;
+            padding: 1.5rem 1rem;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1) 0.3s;
+        }
+        
+        .event-stats.animate-in {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .stat-item {
+            text-align: center;
+            flex: 1;
+        }
+        
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #fcd1a0;
+            display: block;
+            margin-bottom: 0.3rem;
+        }
+        
+        .stat-label {
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.8);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .see-more-btn {
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border-radius: 25px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            opacity: 0;
+            transform: translateY(20px);
+            align-self: center;
+            margin-top: 1rem;
+        }
+        
+        .see-more-btn.animate-in {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .see-more-btn:hover {
+            background: rgba(255, 255, 255, 0.25);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+        
+        /* Event Details Modal */
+        .event-details-modal {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 10;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            overflow-y: auto;
+            padding: 4rem 1.5rem 2rem;
+        }
+        
+        .event-details-modal.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* Section 5: Playlist */
+        .playlist-section {
+            background: transparent;
+        }
+
+        .spotify-embed {
+            width: 100%;
+            max-width: 350px;
+            height: 55vh;
+            min-height: 475px;
+            border-radius: 20px;
+            margin: 1rem 0;
+            border: none;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+        }
+
+        /* Navigation hints */
+        .nav-hint {
+            position: fixed;
+            bottom: 1rem;
+            left: 50%;
+            transform: translateX(-50%);
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9rem;
+            text-align: center;
+            z-index: 99;
+        }
+
+        /* Hide navigation arrows but keep functionality */
+        .nav-arrows {
+            display: none;
+        }
+
+        @media (max-width: 428px) {
+            .section-content {
+                padding: 1rem;
+                max-height: 100vh;
+                padding-top: 4rem;
+            }
+            
+            .coffee-section .section-content {
+                max-height: none;
+            }
+            
+            .section-title {
+                font-size: 1.5rem;
+            }
+            
+            .vinyl-record {
+                width: 160px;
+                height: 160px;
+            }
+            
+            .gallery-container {
+                width: 100%;
+                height: 100vh;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <div class="progress-container" id="progressContainer">
+            <div class="progress-segment" data-section="0"></div>
+            <div class="progress-segment" data-section="1"></div>
+            <div class="progress-segment" data-section="2"></div>
+            <div class="progress-segment" data-section="3"></div>
+            <div class="progress-segment" data-section="4"></div>
+            <div class="progress-segment" data-section="5"></div>
+        </div>
+
+        <div class="mini-nav-container">
+            <button class="mini-nav-btn" id="miniNavBack">
+                <span style="font-size: 0.9rem; font-weight: bold;">←</span>
+            </button>
+            <button class="mini-nav-btn" id="miniNavForward">
+                <span style="font-size: 0.9rem; font-weight: bold;">→</span>
+            </button>
+            <button class="mini-play-button" id="miniPlayButton">
+                <span id="miniPlayIcon">||</span>
+            </button>
+        </div>
+        
+
+        <div class="nav-arrows nav-left" id="navLeft">‹</div>
+        <div class="nav-arrows nav-right" id="navRight">›</div>
+
+        <div class="sections-container" id="sectionsContainer">
+            <!-- Section 1: Voice Memo Welcome -->
+            <section class="section voice-memo">
+                <div class="section-content">
+                    <div class="vinyl-container">
+                        <div class="vinyl-record" id="vinylRecord"></div>
+                        
+                        <div class="track-info">
+                            <div class="track-title">Your November Journey</div>
+                            <div class="track-artist">Coffee Membership Recap</div>
+                        </div>
+                        
+                        <!-- Text Message Interface -->
+                        <div class="message-container" id="messageContainer">
+                            <div class="message-row">
+                                <img src="user-photo.jpg" alt="User" class="user-photo" />
+                                <div class="text-bubble" id="textBubble">
+                                    Hey, this is an audio message from Adam and Ron.
+                                </div>
+                            </div>
+                            
+                            <div class="message-row">
+                                <img src="user-photo.jpg" alt="User" class="user-photo" />
+                                <div class="audio-bubble" id="audioBubble">
+                                    <div class="audio-play-icon" id="audioPlayIcon">
+                                        <span id="audioIconText">▶</span>
+                                    </div>
+                                    <div class="audio-waveform-mini" id="audioWaveformMini">
+                                        <!-- Waveform bars will be generated by JavaScript -->
+                                    </div>
+                                    <div class="audio-duration" id="audioDuration">0:45</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <audio id="audioPlayer">
+                        <source src="demoHush.m4a" type="audio/mp4">
+                    </audio>
+                    
+                    <button class="start-button" id="startButton">Start</button>
+                </div>
+            </section>
+
+            <!-- Section 2: Featured Coffee #1 -->
+            <section class="section coffee-section" data-coffee="regular">
+                <img src="https://images.unsplash.com/photo-1497935586351-b67a49e012bf?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" alt="Ethiopian Yirgacheffe Coffee" class="coffee-hero">
+                
+                <!-- Coffee Journey Slideshow - populated from JSON -->
+                <div class="coffee-journey" data-coffee="0">
+                    <!-- Gallery images will be loaded from JSON configuration -->
+                </div>
+                
+                <div class="coffee-overlay">
+                    <div class="coffee-header">
+                        <div class="coffee-label">Regular</div>
+                        <div class="coffee-name">Ethiopian Yirgacheffe</div>
+                    </div>
+                    
+                    <div class="coffee-details">
+                        <div class="coffee-origin-brief">Yirgacheffe, Ethiopia • Natural Process</div>
+                        
+                        <div class="coffee-notes-brief">
+                            <span class="note-brief">Blueberry</span>
+                            <span class="note-brief">Floral</span>
+                            <span class="note-brief">Wine-like</span>
+                            <span class="note-brief">Bergamot</span>
+                        </div>
+                        
+                        <button class="see-details-btn" data-coffee="0">See Details</button>
+                    </div>
+                </div>
+                
+                <div class="coffee-effects">
+                    <div class="steam-animation">
+                        <div class="steam-line"></div>
+                        <div class="steam-line"></div>
+                        <div class="steam-line"></div>
+                    </div>
+                </div>
+                
+                <div class="coffee-title-section">
+                    <div class="coffee-header">
+                        <div class="coffee-label">Regular</div>
+                        <div class="coffee-name">Ethiopian Yirgacheffe</div>
+                    </div>
+                    
+                    <div class="coffee-details">
+                        <div class="coffee-origin-brief">Yirgacheffe, Ethiopia • Natural Process</div>
+                        
+                        <div class="coffee-notes-brief">
+                            <span class="note-brief">Blueberry</span>
+                            <span class="note-brief">Floral</span>
+                            <span class="note-brief">Wine</span>
+                        </div>
+                        
+                        <button class="see-details-btn" data-coffee="0">See Details</button>
+                    </div>
+                </div>
+                
+                <div class="coffee-details-modal" id="coffeeModal0">
+                    <button class="details-close-btn" data-modal="0">×</button>
+                    <div class="section-content" style="padding-top: 2rem; color: white;">
+                        <h2 class="section-title">Ethiopian Yirgacheffe</h2>
+                        <p class="section-subtitle">From the birthplace of coffee</p>
+                        
+                        <div style="background: rgba(255,255,255,0.1); border-radius: 15px; padding: 1rem; margin: 1rem 0; backdrop-filter: blur(10px);">
+                            <p><strong>Origin:</strong> Yirgacheffe, Ethiopia</p>
+                            <p><strong>Process:</strong> Natural</p>
+                            <p><strong>Altitude:</strong> 1,700-2,200m</p>
+                            <p><strong>Farmer:</strong> Konga Cooperative</p>
+                            <p><strong>Varietal:</strong> Heirloom varieties</p>
+                        </div>
+                        
+                        <div style="display: flex; flex-wrap: wrap; gap: 0.5rem; justify-content: center; margin: 1rem 0;">
+                            <span class="note-brief">Blueberry</span>
+                            <span class="note-brief">Lemon</span>
+                            <span class="note-brief">Floral</span>
+                            <span class="note-brief">Wine-like</span>
+                            <span class="note-brief">Bergamot</span>
+                            <span class="note-brief">Jasmine</span>
+                        </div>
+                        
+                        <p style="color: rgba(255,255,255,0.8); font-size: 0.9rem; line-height: 1.4; margin-top: 1rem;">
+                            This exceptional coffee showcases the unique terroir of Yirgacheffe with its bright acidity and complex fruit notes. The natural processing method enhances the berry characteristics while maintaining the signature floral aromatics.
+                        </p>
+                        
+                        <div style="margin-top: 1.5rem; padding: 1rem; background: rgba(255,255,255,0.1); border-radius: 10px;">
+                            <h4 style="color: #da7d13; margin-bottom: 0.5rem;">Brewing Guide</h4>
+                            <p style="color: rgba(255,255,255,0.8); font-size: 0.8rem; line-height: 1.4;">Ratio: 1:16 | Grind: Medium-fine | Water temp: 195-205°F | Brew time: 4-6 minutes</p>
+                        </div>
+                        
+                        <div style="margin-top: 1rem; padding: 1rem; background: rgba(255,255,255,0.1); border-radius: 10px;">
+                            <h4 style="color: #da7d13; margin-bottom: 0.5rem;">Farm Story</h4>
+                            <p style="color: rgba(255,255,255,0.8); font-size: 0.8rem; line-height: 1.4;">The Konga Cooperative represents over 2,000 smallholder farmers in the Yirgacheffe region. Each farmer carefully tends to their coffee plants at altitudes between 1,700-2,200 meters, where the cool climate and rich soil create ideal growing conditions.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section 3: Featured Coffee #2 -->
+            <section class="section coffee-section" data-coffee="aha">
+                <img src="https://images.unsplash.com/photo-1447933601403-0c6688de566e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" alt="Colombian Huila Coffee" class="coffee-hero">
+                
+                <!-- Coffee Journey Slideshow - populated from JSON -->
+                <div class="coffee-journey" data-coffee="1">
+                    <!-- Gallery images will be loaded from JSON configuration -->
+                </div>
+                
+                <div class="coffee-overlay">
+                    <div class="coffee-header">
+                        <div class="coffee-label">A-HA</div>
+                        <div class="coffee-name">Colombian Huila</div>
+                    </div>
+                    
+                    <div class="coffee-details">
+                        <div class="coffee-origin-brief">Huila, Colombia • Washed Process</div>
+                        
+                        <div class="coffee-notes-brief">
+                            <span class="note-brief">Chocolate</span>
+                            <span class="note-brief">Caramel</span>
+                            <span class="note-brief">Orange</span>
+                            <span class="note-brief">Balanced</span>
+                        </div>
+                        
+                        <button class="see-details-btn" data-coffee="1">See Details</button>
+                    </div>
+                </div>
+                
+                <div class="coffee-effects">
+                    <div class="steam-animation">
+                        <div class="steam-line"></div>
+                        <div class="steam-line"></div>
+                        <div class="steam-line"></div>
+                    </div>
+                </div>
+                
+                <div class="coffee-title-section">
+                    <div class="coffee-header">
+                        <div class="coffee-label">A-HA</div>
+                        <div class="coffee-name">Colombian Huila</div>
+                    </div>
+                    
+                    <div class="coffee-details">
+                        <div class="coffee-origin-brief">Huila, Colombia • Washed Process</div>
+                        
+                        <div class="coffee-notes-brief">
+                            <span class="note-brief">Chocolate</span>
+                            <span class="note-brief">Caramel</span>
+                            <span class="note-brief">Nutty</span>
+                        </div>
+                        
+                        <button class="see-details-btn" data-coffee="1">See Details</button>
+                    </div>
+                </div>
+                
+                <div class="coffee-details-modal" id="coffeeModal1">
+                    <button class="details-close-btn" data-modal="1">×</button>
+                    <div class="section-content" style="padding-top: 2rem; color: white;">
+                        <h2 class="section-title">Colombian Huila</h2>
+                        <p class="section-subtitle">Rich and balanced from the Andes</p>
+                        
+                        <div style="background: rgba(255,255,255,0.1); border-radius: 15px; padding: 1rem; margin: 1rem 0; backdrop-filter: blur(10px);">
+                            <p><strong>Origin:</strong> Huila, Colombia</p>
+                            <p><strong>Process:</strong> Washed</p>
+                            <p><strong>Altitude:</strong> 1,500-1,800m</p>
+                            <p><strong>Farm:</strong> Finca El Paraíso</p>
+                            <p><strong>Varietal:</strong> Caturra, Castillo</p>
+                        </div>
+                        
+                        <div style="display: flex; flex-wrap: wrap; gap: 0.5rem; justify-content: center; margin: 1rem 0;">
+                            <span class="note-brief">Chocolate</span>
+                            <span class="note-brief">Caramel</span>
+                            <span class="note-brief">Orange</span>
+                            <span class="note-brief">Balanced</span>
+                            <span class="note-brief">Nutty</span>
+                            <span class="note-brief">Brown Sugar</span>
+                        </div>
+                        
+                        <p style="color: rgba(255,255,255,0.8); font-size: 0.9rem; line-height: 1.4; margin-top: 1rem;">
+                            A classic representation of Colombian coffee excellence. The washed processing highlights the coffee's inherent sweetness and creates a clean, bright cup with chocolate undertones and citrus brightness.
+                        </p>
+                        
+                        <div style="margin-top: 1.5rem; padding: 1rem; background: rgba(255,255,255,0.1); border-radius: 10px;">
+                            <h4 style="color: #da7d13; margin-bottom: 0.5rem;">Brewing Guide</h4>
+                            <p style="color: rgba(255,255,255,0.8); font-size: 0.8rem; line-height: 1.4;">Ratio: 1:15 | Grind: Medium | Water temp: 200-208°F | Perfect for espresso and French press</p>
+                        </div>
+                        
+                        <div style="margin-top: 1rem; padding: 1rem; background: rgba(255,255,255,0.1); border-radius: 10px;">
+                            <h4 style="color: #da7d13; margin-bottom: 0.5rem;">Region Profile</h4>
+                            <p style="color: rgba(255,255,255,0.8); font-size: 0.8rem; line-height: 1.4;">Huila is known for producing some of Colombia's finest coffees. The region's volcanic soil and distinct wet and dry seasons create ideal conditions for developing complex flavors and balanced acidity.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section 4: Community Highlight -->
+            <section class="section community-highlight">
+                <div class="community-container">
+                    <div class="community-title">Community Spotlight</div>
+                    
+                    <div class="member-circular-photo">
+                        <img src="https://images.unsplash.com/photo-1494790108755-2616c35ecbb5?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Whitney Chen">
+                    </div>
+                    
+                    <div class="member-name">Whitney Chen</div>
+                    <div class="member-role">Visual Storyteller</div>
+                    
+                    <button class="instagram-btn">View Instagram</button>
+                    
+                    <div class="member-description">
+                        Documents coffee community stories with her creative lens.
+                    </div>
+                    
+                    <div class="member-stat">
+                        <span class="stat-icon">📸</span>
+                        <span class="stat-text">Captured 200+ coffee stories</span>
+                    </div>
+                    
+                    <div class="showcase-image">
+                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Whitney's Featured Work">
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section 5: Event Gallery - populated from JSON -->
+            <section class="section event-gallery">
+                <div class="gallery-container">
+                    <!-- Event gallery images will be loaded from JSON configuration -->
+                </div>
+                
+                <div class="event-overlay">
+                    <div class="event-title-container">
+                        <div class="event-main-title">November</div>
+                        <div class="event-subtitle">Monthly Notes</div>
+                    </div>
+                    
+                    <div>
+                        <div class="event-stats">
+                            <div class="stat-item">
+                                <span class="stat-number">110</span>
+                                <span class="stat-label">Members</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-number">3</span>
+                                <span class="stat-label">Origins</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-number">6</span>
+                                <span class="stat-label">Events</span>
+                            </div>
+                        </div>
+                        
+                        <button class="see-more-btn" id="eventDetailsBtn">See More</button>
+                    </div>
+                </div>
+                
+               <div class="event-details-modal" id="eventModal">
+                  <button class="details-close-btn" id="eventCloseBtn">×</button>
+                  <div class="section-content month" style="padding-top: 2rem; color: white;">
+                    
+                    <h2 class="section-title">November — Slow Fridays</h2>
+                    <p class="section-subtitle">Coffee, conversation, and a quiet corner to be human</p>
+
+                    <div style="background: rgba(255,255,255,0.1); border-radius: 15px; padding: 1rem; margin: 1rem 0; backdrop-filter: blur(10px);">
+                      <p><strong>When:</strong> Every Friday · 7:30–10am</p>
+                      <p><strong>Where:</strong> Hush Studio · Bend, OR</p>
+                      <p><strong>Vibe:</strong> Slow + easy · come + go as you like</p>
+                      <p><strong>Guests:</strong> Friends, neighbors, strangers</p>
+                      <p><strong>Coffee:</strong> Rotating monthly beans</p>
+                      <p><strong>Most Loved:</strong> Colombia + Costa Rica this month</p>
+                    </div>
+
+                    <div style="margin-top: 1.5rem; padding: 1rem; background: rgba(255,255,255,0.1); border-radius: 10px;">
+                      <h4 style="color: #da7d13; margin-bottom: 0.5rem;">What Happened</h4>
+                      <p style="color: rgba(255,255,255,0.8); font-size: 0.9rem; line-height: 1.4;">
+                        We opened the doors, turned on the kettle, and let the morning unfold.
+                        Some folks talked bikes, others journaled, a few just stared out the window
+                        with warm mugs. No rush. Every pour was a tiny celebration that we made it
+                        to another Friday.
+                      </p>
+                    </div>
+
+                    <div style="margin-top: 1rem; padding: 1rem; background: rgba(255,255,255,0.1); border-radius: 10px;">
+                      <h4 style="color: #da7d13; margin-bottom: 0.5rem;">Next Friday</h4>
+                      <p style="color: rgba(255,255,255,0.8); font-size: 0.9rem; line-height: 1.4;">
+                        Same time · same place.  
+                        We’ll be brewing something new on the bar, plus our regular but better house coffee.  
+                        Show up. Sip slow. Wander out whenever you’re ready.
+                      </p>
+                    </div>
+
+                  </div>
+
+                </div>
+            </section>
+
+            <!-- Section 5: Monthly Playlist -->
+            <section class="section playlist-section">
+                <div class="section-content">
+                    <h2 class="section-title" style="font-size: 1.5rem; padding-top: 10px;">November Coffee Vibes</h2>
+                    
+                    <iframe class="spotify-embed" id="spotifyEmbed"
+                        src="https://open.spotify.com/embed/playlist/37i9dQZF1DX0XUsuxWHRQd?utm_source=generator&theme=0&autoplay=1&auto_play=true" 
+                        frameBorder="0" 
+                        allowfullscreen="" 
+                        allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" 
+                        loading="lazy">
+                    </iframe>
+                    
+                    <p style="color: rgba(255,255,255,0.7); font-size: 0.9rem; margin-top: 1rem;">
+                        Thank you for being part of our coffee community!
+                    </p>
+                </div>
+            </section>
+        </div>
+
+        <!-- Audio Controls -->
+        <div class="audio-controls-container" id="audioControls">
+            <div class="audio-waveform">
+                <canvas class="waveform-canvas" id="waveformCanvas"></canvas>
+            </div>
+            <div class="playback-controls">
+                <div class="time-display" id="currentTime">0:00</div>
+                
+                <div class="controls-center">
+                    <button class="control-button" id="skipBackButton">
+                      <svg width="24" height="24" viewBox="0 0 24 24"
+                         fill="none" stroke="currentColor" stroke-width="2"
+                         stroke-linecap="round" stroke-linejoin="round">
+                      <!-- circular arrow reversed -->
+                      <path d="M3 12a9 9 0 1 0 3.3-7" />
+                      <polyline points="3 3 3 9 9 9" />
+
+                      <!-- number -->
+                      <text 
+                        x="13.2" 
+                        y="14.5" 
+                        font-size="7"
+                        fill="currentColor"
+                        stroke="none"
+                        text-anchor="middle"
+                        font-family="sans-serif"
+                      >
+                        10
+                      </text>
+                    </svg>
+                    </button>
+                    <button class="control-button play-button" id="playButtonMain">
+                        <span id="playIconMain">▶</span>
+                    </button>
+                    <button class="control-button" id="skipForwardButton">
+                       <svg width="24" height="24" viewBox="0 0 24 24"
+                             fill="none" stroke="currentColor" stroke-width="2"
+                             stroke-linecap="round" stroke-linejoin="round">
+                          <!-- circular arrow -->
+                          <path d="M21 12a9 9 0 1 1-3.3-7" />
+                          <polyline points="21 3 21 9 15 9" />
+
+                          <!-- number -->
+                          <text 
+                            x="10.8" 
+                            y="14.5" 
+                            font-size="7"
+                            fill="currentColor"
+                            stroke="none"
+                            text-anchor="middle"
+                            font-family="sans-serif"
+                          >
+                            10
+                          </text>
+                        </svg>
+                    </button>
+                </div>
+                
+                <div class="time-display" id="totalTime">0:00</div>
+            </div>
+        </div>
+
+
+
+    </div>
+
+    <script>
+        // Global configuration object
+        let appConfig = null;
+        
+        // Track coffee gallery slideshow intervals
+        let coffeeGalleryIntervals = {};
+        
+        // Load configuration from JSON
+        async function loadConfiguration() {
+            try {
+                const response = await fetch('content-config.json?t=' + Date.now()); // Add timestamp to bypass cache
+                appConfig = await response.json();
+                return appConfig;
+            } catch (error) {
+                console.error('❌ Failed to load configuration:', error);
+                // Fallback to default values if JSON fails to load
+                return null;
+            }
+        }
+        
+        // Update progress segments based on enabled sections
+        function updateProgressSegments() {
+            if (!appConfig) return;
+            
+            const progressContainer = document.getElementById('progressContainer');
+            if (!progressContainer) return;
+            
+            // Calculate active sections: Home (0), Coffee1 (1), Coffee2 (2), Community (3), Events (4), Spotify (5)
+            const activeSections = [0, 1, 2]; // Always have Home, Coffee1, Coffee2
+            
+            if (appConfig.community.enabled !== false) {
+                activeSections.push(3); // Community
+            }
+            if (appConfig.events.enabled !== false) {
+                activeSections.push(4); // Events
+            }
+            activeSections.push(5); // Always have Spotify
+            
+            // Clear existing segments
+            progressContainer.innerHTML = '';
+            
+            // Create segments for active sections only
+            activeSections.forEach((sectionIndex, displayIndex) => {
+                const segment = document.createElement('div');
+                segment.className = 'progress-segment';
+                segment.setAttribute('data-section', displayIndex); // Use display index
+                segment.setAttribute('data-original-section', sectionIndex); // Keep original section reference
+                progressContainer.appendChild(segment);
+            });
+            
+            // Update totalSections global variable
+            window.totalSections = activeSections.length;
+            totalSections = activeSections.length; // Update local variable too
+            
+            
+            // Update progressSegments reference
+            window.progressSegments = document.querySelectorAll('.progress-segment');
+            progressSegments = window.progressSegments; // Update local reference too
+            
+            // Create section mapping for navigation
+            window.sectionMapping = activeSections;
+        }
+        
+        // Start coffee-specific gallery slideshow
+        function startCoffeeGallerySlideshow(coffeeId, imageCount) {
+            // Stop any existing slideshow for this coffee
+            if (coffeeGalleryIntervals[coffeeId]) {
+                clearInterval(coffeeGalleryIntervals[coffeeId]);
+            }
+            
+            if (imageCount <= 1) return;
+            
+            let currentImage = 0;
+            coffeeGalleryIntervals[coffeeId] = setInterval(() => {
+                const images = document.querySelectorAll(`[data-coffee-gallery="${coffeeId}"]`);
+                if (images.length === 0) {
+                    clearInterval(coffeeGalleryIntervals[coffeeId]);
+                    return;
+                }
+                
+                // Remove active class from current image
+                images[currentImage]?.classList.remove('active');
+                
+                // Move to next image
+                currentImage = (currentImage + 1) % images.length;
+                
+                // Add active class to new image
+                images[currentImage]?.classList.add('active');
+                
+            }, 4000); // Change image every 4 seconds
+            
+        }
+        
+        // Apply configuration to DOM elements
+        function applyConfiguration() {
+            if (!appConfig) return;
+            
+            try {
+                // Update app title and subtitle
+                const appTitle = document.querySelector('.track-title');
+                const appSubtitle = document.querySelector('.track-artist');
+                if (appTitle) appTitle.textContent = appConfig.app.title;
+                if (appSubtitle) appSubtitle.textContent = appConfig.app.subtitle;
+                
+                // Update start button
+                const startButton = document.getElementById('startButton');
+                if (startButton) startButton.textContent = appConfig.homeScreen.startButton.text;
+                
+                // Update messages
+                const textBubble = document.getElementById('textBubble');
+                const audioDuration = document.getElementById('audioDuration');
+                if (textBubble) textBubble.textContent = appConfig.homeScreen.messages[0].content;
+                if (audioDuration) audioDuration.textContent = appConfig.homeScreen.messages[1].duration;
+                
+                // Update coffee sections
+                appConfig.coffees.forEach((coffee, index) => {
+                    const coffeeSection = document.querySelector(`[data-coffee="${coffee.id}"]`);
+                    if (coffeeSection) {
+                        // Update hero image
+                        const heroImage = coffeeSection.querySelector('.coffee-hero');
+                        if (heroImage) {
+                            heroImage.src = coffee.heroImage;
+                            heroImage.alt = `${coffee.name} Coffee`;
+                        }
+                        
+                        // Update coffee labels and names in ALL locations
+                        const labels = coffeeSection.querySelectorAll('.coffee-label');
+                        const names = coffeeSection.querySelectorAll('.coffee-name');
+                        labels.forEach(label => label.textContent = coffee.label);
+                        names.forEach(name => name.textContent = coffee.name);
+                        
+                        // Update coffee journey gallery - ONLY JSON IMAGES
+                        const journey = coffeeSection.querySelector(`.coffee-journey[data-coffee="${index}"]`);
+                        if (journey) {
+                            
+                            // Always clear the journey first
+                            journey.innerHTML = '';
+                            
+                            // Only add images if they exist in JSON
+                            if (coffee.gallery && coffee.gallery.length > 0) {
+                                coffee.gallery.forEach((imgSrc, imgIndex) => {
+                                    const img = document.createElement('img');
+                                    img.src = imgSrc;
+                                    img.className = imgIndex === 0 ? 'journey-image active' : 'journey-image'; // Use journey-image class
+                                    img.alt = `${coffee.name} Image ${imgIndex + 1}`;
+                                    img.setAttribute('data-journey', `json-image-${imgIndex}`);
+                                    img.setAttribute('data-coffee-gallery', coffee.id); // Add coffee ID for targeting
+                                    
+                                    // Add load/error handlers
+                                    img.onload = () => {};
+                                    img.onerror = () => {};
+                                    
+                                    journey.appendChild(img);
+                                });
+                                
+                                // Start slideshow for this coffee gallery if it has multiple images
+                                if (coffee.gallery.length > 1) {
+                                    startCoffeeGallerySlideshow(coffee.id, coffee.gallery.length);
+                                }
+                                
+                            } else {
+                                console.log(`ℹ️  No gallery images in JSON for ${coffee.name}, leaving empty`);
+                            }
+                        }
+                        
+                        // Update background image if specified
+                        if (coffee.backgroundImage) {
+                            coffeeSection.style.backgroundImage = `url(${coffee.backgroundImage})`;
+                            coffeeSection.style.backgroundSize = 'cover';
+                            coffeeSection.style.backgroundPosition = 'center';
+                            console.log(`🖼️ Set background image: ${coffee.backgroundImage}`);
+                        }
+                        
+                        // Update ALL coffee details sections (there are multiple)
+                        const detailsSections = coffeeSection.querySelectorAll('.coffee-details');
+                        detailsSections.forEach(detailsSection => {
+                            // Update brief origin and notes
+                            const originBrief = detailsSection.querySelector('.coffee-origin-brief');
+                            const notesBrief = detailsSection.querySelector('.coffee-notes-brief');
+                            
+                            if (originBrief && coffee.originBrief) {
+                                originBrief.textContent = coffee.originBrief;
+                            }
+                            if (notesBrief && coffee.notesBrief) {
+                                // Clear existing note spans and replace with new content
+                                notesBrief.innerHTML = '';
+                                // Split the notesBrief by bullet points and create spans
+                                const notes = coffee.notesBrief.split(' • ');
+                                notes.forEach(note => {
+                                    const span = document.createElement('span');
+                                    span.className = 'note-brief';
+                                    span.textContent = note;
+                                    notesBrief.appendChild(span);
+                                });
+                            }
+                            
+                            // Update longer origin and descriptors (if they exist as p tags)
+                            const originP = detailsSection.querySelector('p');
+                            if (originP) originP.textContent = coffee.origin;
+                            
+                            // Update descriptors
+                            const descriptorP = detailsSection.querySelectorAll('p')[1];
+                            if (descriptorP) {
+                                descriptorP.textContent = coffee.descriptors.join(' • ');
+                            }
+                        });
+                        
+                        // Update modal content completely
+                        const modal = document.getElementById(`coffeeModal${index}`);
+                        if (modal) {
+                            const modalContent = modal.querySelector('.section-content');
+                            if (modalContent) {
+                                // Preserve essential styles for visibility
+                                modalContent.style.paddingTop = '2rem';
+                                modalContent.style.color = 'white';
+                                
+                                // Rebuild modal content with all details from JSON
+                                modalContent.innerHTML = `
+                                    <h2 class="section-title" style="color: #ffffff !important; font-size: 32px !important; margin-bottom: 0.5rem !important; display: block !important;">${coffee.name}</h2>
+                                    <p class="section-subtitle" style="color: white !important; font-size: 18px !important; margin-bottom: 1rem !important; display: block !important;">${coffee.details.subtitle}</p>
+                                    
+                                    <div style="background: rgba(255,255,255,0.1); border-radius: 15px; padding: 1rem; margin: 1rem 0; backdrop-filter: blur(10px);">
+                                        ${Object.entries(coffee.details.characteristics).map(([key, value]) => 
+                                            `<p style="color: white; margin: 0.25rem 0;"><strong>${key}:</strong> ${value}</p>`
+                                        ).join('')}
+                                    </div>
+                                    
+                                    <p style="color: rgba(255,255,255,0.8); font-size: 0.9rem; line-height: 1.4; margin-top: 1rem;">
+                                        ${coffee.details.description}
+                                    </p>
+                                    
+                                    ${coffee.details.story ? `
+                                    <div style="margin-top: 1.5rem; padding: 1rem; background: rgba(255,255,255,0.1); border-radius: 10px;">
+                                        <h4 style="color: #ffffff; margin-bottom: 0.5rem;">The Story</h4>
+                                        <p style="color: rgba(255,255,255,0.8); font-size: 0.9rem; line-height: 1.4; white-space: pre-line;">
+                                            ${coffee.details.story}
+                                        </p>
+                                    </div>
+                                    ` : ''}
+                                    
+                                    <div style="margin-top: 1rem; padding: 1rem; background: rgba(255,255,255,0.1); border-radius: 10px;">
+                                        <h4 style="color: #ffffff; margin-bottom: 0.5rem; padding-bottom:20px;">Tasting Notes</h4>
+                                        <div style="display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.5rem;">
+                                            ${coffee.descriptors.map(descriptor => 
+                                                `<span style="background: rgba(255,215,0,0.2); border: 1px solid #f4d398; color: #f4d398; padding: 4px 12px; border-radius: 15px; font-size: 0.85rem;">${descriptor}</span>`
+                                            ).join('')}
+                                        </div>
+                                    </div>
+                                `;
+                                
+                                // Don't move the close button - it should stay outside the content area
+                            }
+                        }
+                    }
+                    
+                    console.log(`✅ Updated coffee ${index + 1}:`, coffee.name, '- Gallery images:', coffee.gallery.length);
+                });
+                
+                // Update community section or hide it
+                const communitySection = document.querySelector('.community-highlight');
+                if (appConfig.community.enabled === false) {
+                    // Hide community section
+                    if (communitySection) {
+                        communitySection.style.display = 'none';
+                        console.log('🔧 Community section hidden via JSON config');
+                    }
+                } else {
+                    // Show and update community section
+                    if (communitySection) {
+                        communitySection.style.display = 'flex';
+                    }
+                    
+                    const communityTitle = document.querySelector('.community-title');
+                    const memberName = document.querySelector('.member-name');
+                    const memberRole = document.querySelector('.member-role');
+                    const memberDescription = document.querySelector('.member-description');
+                    const memberPhoto = document.querySelector('.member-circular-photo img');
+                    const instagramBtn = document.querySelector('.instagram-btn');
+                    const memberStat = document.querySelector('.stat-text');
+                    const showcaseImage = document.querySelector('.showcase-image img');
+                    
+                    if (communityTitle) communityTitle.textContent = appConfig.community.title;
+                    if (memberName) memberName.textContent = appConfig.community.member.name;
+                    if (memberRole) memberRole.textContent = appConfig.community.member.role;
+                    if (memberDescription) memberDescription.textContent = appConfig.community.member.description;
+                    if (memberPhoto) memberPhoto.src = appConfig.community.member.photo;
+                    if (instagramBtn) instagramBtn.textContent = appConfig.community.member.instagramButton;
+                    if (memberStat) memberStat.textContent = appConfig.community.member.stat.text;
+                    if (showcaseImage) showcaseImage.src = appConfig.community.member.showcaseImage;
+                    
+                    console.log('✅ Community section updated from JSON');
+                }
+                
+                // Update events section or hide it
+                const eventsSection = document.querySelector('.event-gallery');
+                if (appConfig.events.enabled === false) {
+                    // Hide events section
+                    if (eventsSection) {
+                        eventsSection.style.display = 'none';
+                        console.log('🔧 Events section hidden via JSON config');
+                    }
+                } else {
+                    // Show and update events section
+                    if (eventsSection) {
+                        eventsSection.style.display = 'flex';
+                    }
+                    
+                    const eventTitle = document.querySelector('.event-main-title');
+                    const eventSubtitle = document.querySelector('.event-subtitle');
+                    const seeMoreBtn = document.querySelector('.see-more-btn');
+                    
+                    if (eventTitle) eventTitle.textContent = appConfig.events.title;
+                    if (eventSubtitle) eventSubtitle.textContent = appConfig.events.subtitle;
+                    if (seeMoreBtn) seeMoreBtn.textContent = appConfig.events.seeMoreButton;
+                    
+                    // Update event stats
+                    const statNumbers = document.querySelectorAll('.stat-number');
+                    const statLabels = document.querySelectorAll('.stat-label');
+                    appConfig.events.stats.forEach((stat, index) => {
+                        if (statNumbers[index]) statNumbers[index].textContent = stat.number;
+                        if (statLabels[index]) statLabels[index].textContent = stat.label;
+                    });
+                    
+                    // Update events gallery images from JSON
+                    const galleryContainer = document.querySelector('.event-gallery .gallery-container');
+                    if (galleryContainer && appConfig.events.gallery) {
+                        console.log('🔧 Loading events gallery from JSON...');
+                        galleryContainer.innerHTML = ''; // Clear any existing content
+                        appConfig.events.gallery.forEach((imageSrc, index) => {
+                            console.log(`📷 Adding event image ${index + 1}: ${imageSrc}`);
+                            const img = document.createElement('img');
+                            img.src = imageSrc;
+                            img.className = index === 0 ? 'gallery-image active' : 'gallery-image';
+                            img.alt = `Cupping Event Photo ${index + 1}`;
+                            galleryContainer.appendChild(img);
+                        });
+                        console.log(`✅ Events gallery populated with ${appConfig.events.gallery.length} images`);
+                    }
+                    
+                    console.log('✅ Events section updated from JSON');
+                }
+                
+                // Update Spotify section
+                const playlistTitle = document.querySelector('.playlist-section h2');
+                const playlistSubtitle = document.querySelector('.playlist-section p');
+                const spotifyEmbed = document.getElementById('spotifyEmbed');
+                
+                if (playlistTitle) playlistTitle.textContent = appConfig.spotify.title;
+                if (playlistSubtitle) playlistSubtitle.textContent = appConfig.spotify.subtitle;
+                if (spotifyEmbed) spotifyEmbed.src = appConfig.spotify.embedUrl;
+                
+                // Update audio source
+                const audioPlayer = document.getElementById('audioPlayer');
+                if (audioPlayer && appConfig.app.audio.file) {
+                    const audioSource = audioPlayer.querySelector('source');
+                    if (audioSource) {
+                        audioSource.src = appConfig.app.audio.file;
+                        audioPlayer.load(); // Reload audio with new source
+                        console.log('✅ Audio source updated to:', appConfig.app.audio.file);
+                    }
+                }
+                
+                // Update user photos in messages
+                const userPhotos = document.querySelectorAll('.message-row img');
+                if (userPhotos && appConfig.app.userPhoto) {
+                    userPhotos.forEach(photo => {
+                        photo.src = appConfig.app.userPhoto;
+                    });
+                }
+                
+                // Update vinyl background
+                const vinylRecord = document.querySelector('.vinyl-record');
+                if (vinylRecord && appConfig.app.vinylBackground) {
+                    vinylRecord.style.backgroundImage = `url('${appConfig.app.vinylBackground}')`;
+                }
+                
+                // Update progress segments based on enabled sections
+                updateProgressSegments();
+                
+                console.log('✅ Configuration applied successfully');
+                
+                // Log what was applied for debugging
+                console.log('📝 Applied updates:');
+                console.log('  - Start button:', startButton?.textContent);
+                console.log('  - Text message:', textBubble?.textContent);
+                console.log('  - Coffee 1 name:', document.querySelector('[data-coffee="regular"] .coffee-name')?.textContent);
+                console.log('  - Coffee 2 name:', document.querySelector('[data-coffee="aha"] .coffee-name')?.textContent);
+                console.log('  - Community member:', memberName?.textContent);
+                
+            } catch (error) {
+                console.error('❌ Error applying configuration:', error);
+            }
+        }
+        
+        let currentSection = 0;
+        let totalSections = 6; // Will be updated by updateProgressSegments()
+        let isPlaying = false;
+        let galleryInterval;
+        let autoProgressEnabled = false;
+        let autoProgressTimer;
+        let currentSectionTimer;
+        let audioContext;
+        let analyser;
+        let dataArray;
+        let animationId;
+        let progressPaused = true; // Start with progress paused
+        let coffeeAnimationTimeouts = [];
+        // ===== UNIFIED TIMING CONFIGURATION =====
+        // This object controls BOTH slide duration AND progress bar timing
+        // To change timing: update values here (in milliseconds)
+        // Both auto-progression and progress animation will sync automatically
+        let sectionProgression = {
+            0: 10000, // Home: 10 seconds
+            1: 18000, // Coffee 1: 18 seconds  
+            2: 18000, // Coffee 2: 18 seconds
+            3: 15000, // Community highlight: 15 seconds
+            4: 20000, // Event recap: 20 seconds
+            5: 0      // Spotify: no auto progression
+        };
+
+        let sectionsContainer, progressSegments, audioPlayer, startButton, vinylRecord, audioControls;
+        let playButtonMain, playIconMain, waveformCanvas, messageContainer, textBubble, audioBubble;
+        let audioPlayIcon, audioIconText, audioWaveformMini, audioDuration;
+        let miniPlayButton, miniPlayIcon, miniNavBack, miniNavForward;
+        
+        // Initialize DOM elements after page loads
+        document.addEventListener('DOMContentLoaded', async function() {
+            // Load configuration first
+            await loadConfiguration();
+            sectionsContainer = document.getElementById('sectionsContainer');
+            progressSegments = document.querySelectorAll('.progress-segment');
+            audioPlayer = document.getElementById('audioPlayer');
+            startButton = document.getElementById('startButton');
+            vinylRecord = document.getElementById('vinylRecord');
+            audioControls = document.getElementById('audioControls');
+            playButtonMain = document.getElementById('playButtonMain');
+            playIconMain = document.getElementById('playIconMain');
+            waveformCanvas = document.getElementById('waveformCanvas');
+            messageContainer = document.getElementById('messageContainer');
+            textBubble = document.getElementById('textBubble');
+            audioBubble = document.getElementById('audioBubble');
+            audioPlayIcon = document.getElementById('audioPlayIcon');
+            audioIconText = document.getElementById('audioIconText');
+            audioWaveformMini = document.getElementById('audioWaveformMini');
+            audioDuration = document.getElementById('audioDuration');
+            miniPlayButton = document.getElementById('miniPlayButton');
+            miniPlayIcon = document.getElementById('miniPlayIcon');
+            miniNavBack = document.getElementById('miniNavBack');
+            miniNavForward = document.getElementById('miniNavForward');
+            
+            // Auto-scroll to hide browser UI on iPhone for immersive experience
+            function hideIPhoneBrowserUI() {
+                const isIPhone = /iPhone/.test(navigator.userAgent);
+                const isStandalone = window.navigator.standalone;
+                
+                if (isIPhone && !isStandalone) {
+                    // Small delay to ensure page is fully loaded
+                    setTimeout(() => {
+                        window.scrollTo(0, 1);
+                        // Secondary scroll after a brief moment to ensure it sticks
+                        setTimeout(() => {
+                            window.scrollTo(0, 1);
+                        }, 100);
+                    }, 300);
+                }
+            }
+            
+            hideIPhoneBrowserUI();
+            
+            // Initialize the app after elements are loaded
+            initializeApp();
+        });
+        
+        function initializeApp() {
+        
+        // Coffee data - will be populated from configuration
+        function getCoffeeData() {
+            if (appConfig && appConfig.coffees) {
+                const data = {};
+                appConfig.coffees.forEach((coffee, index) => {
+                    data[index] = {
+                        name: coffee.name,
+                        origin: coffee.origin,
+                        descriptors: coffee.descriptors
+                    };
+                });
+                return data;
+            }
+            // Fallback data if config isn't loaded
+            return {
+                0: {
+                    name: 'Ethiopian Yirgacheffe',
+                    origin: 'Yirgacheffe, Ethiopia',
+                    descriptors: ['fruity', 'floral', 'citrus', 'wine', 'berry']
+                },
+                1: {
+                    name: 'Colombian Huila',
+                    origin: 'Huila, Colombia', 
+                    descriptors: ['chocolate', 'nutty', 'caramel']
+                }
+            };
+        }
+        
+        let currentCoffee = 0;
+
+        // Audio visualization setup
+        function setupAudioVisualization() {
+            if (!audioContext) {
+                try {
+                    audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                    const source = audioContext.createMediaElementSource(audioPlayer);
+                    analyser = audioContext.createAnalyser();
+                    source.connect(analyser);
+                    analyser.connect(audioContext.destination);
+                    analyser.fftSize = 256;
+                    dataArray = new Uint8Array(analyser.frequencyBinCount);
+                    console.log('Audio visualization setup complete');
+                } catch (error) {
+                    console.error('Audio context setup failed:', error);
+                }
+            }
+            
+            // Resume audio context if suspended
+            if (audioContext && audioContext.state === 'suspended') {
+                audioContext.resume().then(() => {
+                    console.log('Audio context resumed');
+                });
+            }
+        }
+
+        function drawWaveform() {
+            // Update mini waveform in audio bubble if playing
+            if (currentSection === 0 && isPlaying) {
+                updateMiniWaveform();
+            }
+            
+            if (isPlaying) {
+                animationId = requestAnimationFrame(drawWaveform);
+            }
+        }
+        
+        function createMiniWaveform() {
+            // Create 15 waveform bars
+            audioWaveformMini.innerHTML = '';
+            for (let i = 0; i < 15; i++) {
+                const bar = document.createElement('div');
+                bar.className = 'waveform-bar';
+                bar.style.height = Math.random() * 16 + 8 + 'px';
+                audioWaveformMini.appendChild(bar);
+            }
+        }
+        
+        function updateMiniWaveform() {
+            const bars = audioWaveformMini.querySelectorAll('.waveform-bar');
+            const currentTime = audioPlayer.currentTime;
+            const duration = audioPlayer.duration || 1;
+            const progress = currentTime / duration;
+            
+            bars.forEach((bar, index) => {
+                const barProgress = index / bars.length;
+                if (barProgress <= progress) {
+                    bar.classList.add('active');
+                    // Animate height when active
+                    const baseHeight = Math.random() * 16 + 8;
+                    bar.style.height = baseHeight + Math.sin(Date.now() * 0.01 + index) * 4 + 'px';
+                } else {
+                    bar.classList.remove('active');
+                }
+            });
+        }
+        
+
+        function updateProgressBar() {
+            progressSegments.forEach((segment, index) => {
+                if (index < currentSection) {
+                    // Previous sections should be completed
+                    segment.classList.remove('active');
+                    segment.classList.add('completed');
+                    // Remove any progress fill from completed segments
+                    const progressFill = segment.querySelector('div');
+                    if (progressFill) {
+                        progressFill.remove();
+                    }
+                } else if (index === currentSection) {
+                    // Current section - only make active if progress is enabled and not paused
+                    if (autoProgressEnabled && !progressPaused) {
+                        segment.classList.remove('completed');
+                        segment.classList.add('active');
+                        // Remove any existing progress fill to restart animation
+                        const existingFill = segment.querySelector('div');
+                        if (existingFill) {
+                            existingFill.remove();
+                        }
+                    } else {
+                        // If paused or not started, keep it clean
+                        segment.classList.remove('completed', 'active');
+                        const existingFill = segment.querySelector('div');
+                        if (existingFill) {
+                            existingFill.remove();
+                        }
+                    }
+                } else {
+                    // Future segments should be clean
+                    segment.classList.remove('completed', 'active');
+                    const progressFill = segment.querySelector('div');
+                    if (progressFill) {
+                        progressFill.remove();
+                    }
+                }
+            });
+        }
+
+        
+        function updateMiniNavButtons() {
+            // Update back button
+            miniNavBack.disabled = currentSection === 0;
+            
+            // Update forward button  
+            miniNavForward.disabled = currentSection === totalSections - 1;
+        }
+
+        function updateView() {
+            const translateX = -(currentSection * 16.666);
+            sectionsContainer.style.transform = `translateX(${translateX}%)`;
+            
+            updateProgressBar();
+            updateMiniNavButtons();
+
+            // Use dynamic section mapping to determine which section we're actually on
+            const actualSection = window.sectionMapping ? window.sectionMapping[currentSection] : currentSection;
+            
+            if (actualSection === 3) { // Community section
+                startCommunityHighlight();
+            } else if (actualSection === 4) { // Events section
+                startGallery();
+            } else if (actualSection === 5) { // Spotify section
+                // Trigger Spotify playlist when reaching section 5
+                setTimeout(() => {
+                    triggerSpotifyPlaylist();
+                }, 300); // Small delay to ensure section is fully loaded
+            } else {
+                stopGallery();
+                stopCommunityHighlight();
+            }
+            
+            // Stop coffee journeys when not on coffee sections (sections 1 and 2 are always coffee)
+            if (actualSection !== 1 && actualSection !== 2) {
+                stopCoffeeJourneys();
+            }
+            
+            // Handle last section - instantly fill
+            if (currentSection === totalSections - 1) {
+                const lastSegment = progressSegments[currentSection];
+                if (lastSegment) {
+                    lastSegment.classList.remove('active');
+                    lastSegment.classList.add('completed');
+                    // Remove any progress fill and make it instantly filled
+                    const progressFill = lastSegment.querySelector('div');
+                    if (progressFill) {
+                        progressFill.remove();
+                    }
+                }
+            }
+            // Setup auto progress for non-last sections if not paused
+            else if (autoProgressEnabled && !progressPaused && currentSection > 0) {
+                setupAutoProgress();
+            }
+        }
+
+        function nextSection() {
+            if (currentSection < totalSections - 1) {
+                currentSection++;
+                updateView();
+            }
+        }
+
+        function prevSection() {
+            if (currentSection > 0) {
+                currentSection--;
+                updateView();
+            }
+        }
+
+        function goToSection(index) {
+            currentSection = index;
+            updateView();
+        }
+
+        function setupAutoProgress() {
+            clearTimeout(autoProgressTimer);
+            if (currentSectionTimer) clearTimeout(currentSectionTimer);
+            
+            if (!progressPaused && currentSection >= 0 && currentSection < totalSections - 1) {
+                // ===== TIMING SYNCHRONIZATION =====
+                // Get duration from unified config (milliseconds)
+                const sectionDuration = sectionProgression[currentSection];
+                
+                // Always create fresh progress animation for current section
+                const currentSegment = progressSegments[currentSection];
+                if (currentSegment && sectionDuration > 0) {
+                    currentSegment.classList.add('active');
+                    
+                    // Remove any existing progress fill
+                    const existingFill = currentSegment.querySelector('div');
+                    if (existingFill) {
+                        existingFill.remove();
+                    }
+                    
+                    // ===== PROGRESS BAR SYNCHRONIZATION =====
+                    // Create progress animation with SAME duration as slide timing
+                    const progressFill = document.createElement('div');
+                    const animationDuration = sectionDuration / 1000; // Convert ms to seconds for CSS
+                    progressFill.style.cssText = `
+                        position: absolute;
+                        top: 0;
+                        left: 0;
+                        height: 100%;
+                        background: #fff;
+                        width: 0;
+                        animation: progressFill ${animationDuration}s linear forwards;
+                    `;
+                    currentSegment.appendChild(progressFill);
+                }
+                
+                // Trigger section-specific animations using actual section mapping
+                const actualSection = window.sectionMapping ? window.sectionMapping[currentSection] : currentSection;
+                if (actualSection === 1 || actualSection === 2) {
+                    startCoffeeAnimations(actualSection);
+                } else if (actualSection === 3) {
+                    startCommunityHighlight();
+                } else if (actualSection === 4) {
+                    startEventAnimations();
+                }
+                
+                // ===== AUTO-PROGRESSION TIMER =====
+                // Set timer using SAME duration as progress bar (from unified config)
+                if (sectionDuration > 0) {
+                    autoProgressTimer = setTimeout(() => {
+                        if (autoProgressEnabled && !progressPaused && currentSection < totalSections - 1) {
+                            // Complete current segment
+                            const currentSegment = progressSegments[currentSection];
+                            if (currentSegment) {
+                                currentSegment.classList.remove('active');
+                                currentSegment.classList.add('completed');
+                            }
+                            nextSection();
+                        }
+                    }, sectionDuration); // Uses exact same timing as progress bar
+                }
+            }
+        }
+        
+        function pauseProgress() {
+            progressPaused = true;
+            clearTimeout(autoProgressTimer);
+            miniPlayIcon.textContent = '▶';
+            
+            // Fill current section indicator and stop auto progression
+            const currentSegment = progressSegments[currentSection];
+            if (currentSegment) {
+                currentSegment.classList.remove('active');
+                currentSegment.classList.add('completed');
+                // Remove any progress fill
+                const progressFill = currentSegment.querySelector('div');
+                if (progressFill) {
+                    progressFill.remove();
+                }
+            }
+        }
+        
+        function resumeProgress() {
+            progressPaused = false;
+            miniPlayIcon.textContent = '||';
+            
+            // Clear completed state from current section before restarting
+            const currentSegment = progressSegments[currentSection];
+            if (currentSegment) {
+                currentSegment.classList.remove('completed');
+                currentSegment.classList.add('active');
+            }
+            
+            // Restart progress on current section
+            if (autoProgressEnabled && currentSection < totalSections - 1) {
+                // For home section, use 6 second timer
+                if (currentSection === 0) {
+                    startHomeProgress();
+                } else {
+                    setupAutoProgress();
+                }
+            }
+        }
+        
+        function startHomeProgress() {
+            console.log('Starting home progress: 10 seconds');
+            setupAutoProgress();
+        }
+        
+        function startCoffeeAnimations(sectionIndex) {
+            const coffeeId = sectionIndex === 1 ? 'regular' : 'aha';
+            console.log(`🔧 Starting coffee animations for section ${sectionIndex} (${coffeeId})`);
+            
+            const coffeeSection = document.querySelector(`[data-coffee="${coffeeId}"]`);
+            if (!coffeeSection) {
+                console.log(`❌ Coffee section not found for ${coffeeId}`);
+                return;
+            }
+            
+            const titleSection = coffeeSection.querySelector('.coffee-title-section');
+            const header = titleSection ? titleSection.querySelector('.coffee-header') : null;
+            const details = titleSection ? titleSection.querySelector('.coffee-details') : null;
+            const button = titleSection ? titleSection.querySelector('.see-details-btn') : null;
+            const steam = coffeeSection.querySelector('.steam-animation');
+            const journey = coffeeSection.querySelector('.coffee-journey');
+            
+            // Clear any existing timeouts
+            coffeeAnimationTimeouts.forEach(timeout => clearTimeout(timeout));
+            coffeeAnimationTimeouts = [];
+            
+            // Reset animations
+            [header, details, button, steam, journey].forEach(el => {
+                if (el) el.classList.remove('animate-in');
+            });
+            
+            // Start animation sequence with faster transitions between elements
+            coffeeAnimationTimeouts.push(setTimeout(() => {
+                if (header) header.classList.add('animate-in');
+            }, 400)); // Header after 0.4s
+            
+            coffeeAnimationTimeouts.push(setTimeout(() => {
+                if (details) details.classList.add('animate-in');
+            }, 1200)); // Details after 1.2s (faster)
+            
+            coffeeAnimationTimeouts.push(setTimeout(() => {
+                if (steam) steam.classList.add('animate-in');
+            }, 2200)); // Steam after 2.2s (faster)
+            
+            coffeeAnimationTimeouts.push(setTimeout(() => {
+                if (button) {
+                    button.classList.add('animate-in');
+                    console.log(`✅ Coffee ${coffeeId} button animated in`);
+                } else {
+                    console.log(`❌ Coffee ${coffeeId} button not found`);
+                }
+            }, 1500)); // Button after 1.5s (much faster for testing)
+            
+            // Start coffee journey slideshow after all content is in
+            coffeeAnimationTimeouts.push(setTimeout(() => {
+                if (journey) {
+                    journey.classList.add('animate-in');
+                    startCoffeeJourney(journey);
+                }
+            }, 4200)); // Journey after 4.2s (faster but maintains gap to overall timing)
+        }
+        
+        function startCoffeeJourney(journeyContainer) {
+            const images = journeyContainer.querySelectorAll('.journey-image');
+            let currentIndex = 0;
+            
+            // Ensure only first image is active initially
+            images.forEach((img, index) => {
+                if (index === 0) {
+                    img.classList.add('active');
+                } else {
+                    img.classList.remove('active');
+                }
+            });
+            
+            function cycleToNext() {
+                // Remove active class from current image
+                images[currentIndex].classList.remove('active');
+                
+                // Move to next index
+                currentIndex = (currentIndex + 1) % images.length;
+                
+                // Add active class to new image
+                images[currentIndex].classList.add('active');
+            }
+            
+            // Cycle through images every 3 seconds
+            const journeyInterval = setInterval(cycleToNext, 3000);
+            
+            // Store interval for cleanup if needed
+            journeyContainer.journeyInterval = journeyInterval;
+        }
+        
+        function stopCoffeeJourneys() {
+            // Stop all coffee journey slideshows when leaving coffee sections
+            document.querySelectorAll('.coffee-journey').forEach(journey => {
+                if (journey.journeyInterval) {
+                    clearInterval(journey.journeyInterval);
+                    journey.journeyInterval = null;
+                }
+            });
+        }
+        
+        function startCommunityHighlight() {
+            const communitySection = document.querySelector('.community-highlight');
+            if (!communitySection) return;
+            
+            const title = communitySection.querySelector('.community-title');
+            const photo = communitySection.querySelector('.member-circular-photo');
+            const name = communitySection.querySelector('.member-name');
+            const role = communitySection.querySelector('.member-role');
+            const instagramBtn = communitySection.querySelector('.instagram-btn');
+            const description = communitySection.querySelector('.member-description');
+            const stat = communitySection.querySelector('.member-stat');
+            const showcase = communitySection.querySelector('.showcase-image');
+            
+            // Clear any existing timeouts
+            coffeeAnimationTimeouts.forEach(timeout => clearTimeout(timeout));
+            coffeeAnimationTimeouts = [];
+            
+            // Reset animations
+            [title, name, role, instagramBtn, description, stat, showcase].forEach(el => {
+                if (el) el.classList.remove('animate-in');
+            });
+            
+            // Start animation sequence with quicker timing
+            coffeeAnimationTimeouts.push(setTimeout(() => {
+                if (title) title.classList.add('animate-in');
+            }, 500)); // Title after 0.5s
+            
+            coffeeAnimationTimeouts.push(setTimeout(() => {
+                if (photo) {
+                    photo.style.opacity = '0';
+                    photo.style.transform = 'scale(0.8)';
+                    photo.style.transition = 'all 0.6s ease';
+                    photo.style.opacity = '1';
+                    photo.style.transform = 'scale(1)';
+                }
+            }, 800)); // Photo after 0.8s
+            
+            coffeeAnimationTimeouts.push(setTimeout(() => {
+                if (name) name.classList.add('animate-in');
+                if (role) role.classList.add('animate-in');
+                if (instagramBtn) instagramBtn.classList.add('animate-in');
+                if (description) description.classList.add('animate-in');
+                if (stat) stat.classList.add('animate-in');
+                if (showcase) showcase.classList.add('animate-in');
+            }, 1200)); // All text elements after 1.2s
+        }
+        
+        function stopCommunityHighlight() {
+            if (window.communityInterval) {
+                clearInterval(window.communityInterval);
+                window.communityInterval = null;
+            }
+        }
+        
+        function startEventAnimations() {
+            const eventSection = document.querySelector('.event-gallery');
+            if (!eventSection) return;
+            
+            const titleContainer = eventSection.querySelector('.event-title-container');
+            const stats = eventSection.querySelector('.event-stats');
+            const button = eventSection.querySelector('.see-more-btn');
+            
+            // Clear any existing timeouts
+            coffeeAnimationTimeouts.forEach(timeout => clearTimeout(timeout));
+            coffeeAnimationTimeouts = [];
+            
+            // Reset animations
+            [titleContainer, stats, button].forEach(el => {
+                if (el) el.classList.remove('animate-in');
+            });
+            
+            // Start animation sequence
+            coffeeAnimationTimeouts.push(setTimeout(() => {
+                if (titleContainer) titleContainer.classList.add('animate-in');
+            }, 2000)); // Title after 2s
+            
+            coffeeAnimationTimeouts.push(setTimeout(() => {
+                if (stats) stats.classList.add('animate-in');
+            }, 4000)); // Stats after 4s
+            
+            coffeeAnimationTimeouts.push(setTimeout(() => {
+                if (button) button.classList.add('animate-in');
+            }, 6000)); // Button after 6s
+        }
+
+        function formatTime(seconds) {
+            const mins = Math.floor(seconds / 60);
+            const secs = Math.floor(seconds % 60);
+            return `${mins}:${secs.toString().padStart(2, '0')}`;
+        }
+
+        // Touch gestures
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+        document.addEventListener('touchstart', (e) => {
+            touchStartX = e.changedTouches[0].screenX;
+        });
+
+        document.addEventListener('touchend', (e) => {
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipe();
+        });
+
+        function handleSwipe() {
+            const swipeThreshold = 50;
+            const diff = touchStartX - touchEndX;
+
+            if (Math.abs(diff) > swipeThreshold) {
+                if (diff > 0) {
+                    nextSection();
+                } else {
+                    prevSection();
+                }
+            }
+        }
+
+        // Navigation arrows (hidden but functional)
+        document.getElementById('navLeft').addEventListener('click', prevSection);
+        document.getElementById('navRight').addEventListener('click', nextSection);
+        
+        // Mini navigation buttons
+        miniNavBack.addEventListener('click', () => {
+            if (currentSection > 0) {
+                prevSection();
+            }
+        });
+        
+        miniNavForward.addEventListener('click', () => {
+            if (currentSection < totalSections - 1) {
+                nextSection();
+            }
+        });
+
+        // Message sequence animation
+            function startMessageSequence() {
+                // First show the message container
+                if (messageContainer) {
+                    messageContainer.classList.add('visible');
+                }
+                
+                // Get message rows
+                const messageRows = document.querySelectorAll('.message-row');
+                
+                // Show first message row (text bubble with user photo) after 0.5s
+                setTimeout(() => {
+                    if (messageRows[0]) {
+                        messageRows[0].classList.add('visible');
+                    }
+                }, 500);
+            
+                
+                // Show second message row (audio bubble with user photo) after 1.5s
+                setTimeout(() => {
+                    if (messageRows[1]) {
+                        messageRows[1].classList.add('visible');
+                        createMiniWaveform();
+                    }
+                }, 1500);
+                
+                // Start audio automatically after audio bubble appears (after 2.5s total)
+                setTimeout(() => {
+                    setupAudioVisualization();
+                    if (audioPlayer) {
+                        audioPlayer.play().then(() => {
+                            isPlaying = true;
+                            if (vinylRecord) vinylRecord.classList.add('spinning');
+                            if (playIconMain) playIconMain.textContent = '||';
+                            if (miniPlayIcon) miniPlayIcon.textContent = '||';
+                            if (audioIconText) audioIconText.textContent = '||';
+                            if (audioPlayIcon) audioPlayIcon.classList.add('playing');
+                            drawWaveform();
+                        }).catch(error => {
+                            console.error('Audio play failed:', error);
+                        });
+                    }
+                }, 2500);
+            }
+        
+            // Start button functionality
+            startButton.addEventListener('click', () => {
+                // Fade out the start button
+                startButton.classList.add('fade-out');
+                
+                // Enable progress and start it
+                progressPaused = false;
+                autoProgressEnabled = true;
+                startHomeProgress();
+                
+                // Show mini play button immediately
+                miniPlayButton.classList.add('visible');
+                
+                // Activate gradient background
+                document.body.classList.add('gradient-active');
+                
+                // Start the message sequence
+                startMessageSequence();
+                
+                // Show audio controls with slide up animation
+                setTimeout(() => {
+                    audioControls.classList.add('visible');
+                    document.querySelector('.voice-memo').classList.add('player-visible');
+                }, 500);
+            });
+
+        // Vinyl record and audio controls
+        vinylRecord.addEventListener('click', () => {
+            setupAudioVisualization();
+            if (isPlaying) {
+                audioPlayer.pause();
+                vinylRecord.classList.remove('spinning');
+                audioControls.classList.remove('active');
+                audioPlayIcon.classList.remove('playing');
+                cancelAnimationFrame(animationId);
+            } else {
+                audioPlayer.play();
+                vinylRecord.classList.add('spinning');
+                audioControls.classList.add('active');
+                audioPlayIcon.classList.add('playing');
+                drawWaveform();
+            }
+            isPlaying = !isPlaying;
+            playIconMain.textContent = isPlaying ? '||' : '▶';
+            miniPlayIcon.textContent = isPlaying ? '||' : '▶';
+            audioIconText.textContent = isPlaying ? '||' : '▶';
+        });
+
+        playButtonMain.addEventListener('click', () => {
+            setupAudioVisualization();
+            if (isPlaying) {
+                audioPlayer.pause();
+                vinylRecord.classList.remove('spinning');
+                audioPlayIcon.classList.remove('playing');
+                cancelAnimationFrame(animationId);
+            } else {
+                audioPlayer.play();
+                vinylRecord.classList.add('spinning');
+                audioPlayIcon.classList.add('playing');
+                drawWaveform();
+            }
+            isPlaying = !isPlaying;
+            playIconMain.textContent = isPlaying ? '||' : '▶';
+            miniPlayIcon.textContent = isPlaying ? '||' : '▶';
+            audioIconText.textContent = isPlaying ? '||' : '▶';
+        });
+        
+        // Audio bubble play button functionality
+        audioPlayIcon.addEventListener('click', () => {
+            setupAudioVisualization();
+            if (isPlaying) {
+                audioPlayer.pause();
+                vinylRecord.classList.remove('spinning');
+                audioPlayIcon.classList.remove('playing');
+                cancelAnimationFrame(animationId);
+            } else {
+                audioPlayer.play();
+                vinylRecord.classList.add('spinning');
+                audioPlayIcon.classList.add('playing');
+                drawWaveform();
+            }
+            isPlaying = !isPlaying;
+            playIconMain.textContent = isPlaying ? '||' : '▶';
+            miniPlayIcon.textContent = isPlaying ? '||' : '▶';
+            audioIconText.textContent = isPlaying ? '||' : '▶';
+        });
+        
+        // Mini play button functionality
+        miniPlayButton.addEventListener('click', () => {
+            if (progressPaused) {
+                resumeProgress();
+            } else {
+                pauseProgress();
+            }
+        });
+
+        // Skip buttons
+        document.getElementById('skipBackButton').addEventListener('click', () => {
+            audioPlayer.currentTime = Math.max(0, audioPlayer.currentTime - 10);
+        });
+
+        document.getElementById('skipForwardButton').addEventListener('click', () => {
+            audioPlayer.currentTime = Math.min(audioPlayer.duration, audioPlayer.currentTime + 10);
+        });
+
+        // Time updates
+        audioPlayer.addEventListener('timeupdate', () => {
+            document.getElementById('currentTime').textContent = formatTime(audioPlayer.currentTime);
+            document.getElementById('totalTime').textContent = formatTime(audioPlayer.duration || 0);
+            
+            // Update audio bubble duration
+            if (audioPlayer.duration) {
+                const remaining = audioPlayer.duration - audioPlayer.currentTime;
+                audioDuration.textContent = formatTime(Math.max(0, remaining));
+            }
+        });
+        
+        // Audio loaded event
+        audioPlayer.addEventListener('loadedmetadata', () => {
+            document.getElementById('totalTime').textContent = formatTime(audioPlayer.duration || 0);
+            audioDuration.textContent = formatTime(audioPlayer.duration || 0);
+            console.log('Audio loaded, duration:', audioPlayer.duration);
+        });
+        
+        // Audio can play event
+        audioPlayer.addEventListener('canplay', () => {
+            console.log('Audio can play, duration:', audioPlayer.duration);
+        });
+        
+        // Audio error event
+        audioPlayer.addEventListener('error', (e) => {
+            console.error('Audio error:', e, audioPlayer.error);
+        });
+        
+        // Audio stalled event
+        audioPlayer.addEventListener('stalled', () => {
+            console.log('Audio stalled');
+        });
+
+        audioPlayer.addEventListener('ended', () => {
+            vinylRecord.classList.remove('spinning');
+            audioControls.classList.remove('active');
+            audioPlayIcon.classList.remove('playing');
+            isPlaying = false;
+            playIconMain.textContent = '▶';
+            miniPlayIcon.textContent = '▶';
+            audioIconText.textContent = '▶';
+            cancelAnimationFrame(animationId);
+            
+            // Auto-navigate to Spotify playlist section when audio finishes
+            setTimeout(() => {
+                currentSection = totalSections - 1; // Navigate to last section (Spotify)
+                updateView();
+                // Trigger Spotify playlist auto-play attempt
+                setTimeout(() => {
+                    triggerSpotifyPlaylist();
+                }, 500); // Small delay after navigation
+            }, 1000); // Wait 1 second after audio ends before navigating
+            
+            // Reset audio duration
+            if (audioPlayer.duration) {
+                audioDuration.textContent = formatTime(audioPlayer.duration);
+            }
+            
+            // Auto-progression is already handled by setupAutoProgress() in unified timing system
+            // No manual timeout needed here - setupAutoProgress() uses sectionProgression config
+        });
+
+        
+
+
+        
+        
+        
+        
+
+        // Gallery slideshow
+        function startGallery() {
+            const images = document.querySelectorAll('.gallery-image');
+            let currentImage = 0;
+
+            galleryInterval = setInterval(() => {
+                images[currentImage].classList.remove('active');
+                currentImage = (currentImage + 1) % images.length;
+                images[currentImage].classList.add('active');
+            }, 3000);
+        }
+
+        function stopGallery() {
+            if (galleryInterval) {
+                clearInterval(galleryInterval);
+            }
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            switch(e.key) {
+                case 'ArrowLeft':
+                    prevSection();
+                    break;
+                case 'ArrowRight':
+                case ' ':
+                    if (autoProgressEnabled || currentSection > 0) {
+                        nextSection();
+                    }
+                    break;
+            }
+        });
+
+        // Tap navigation - left side goes back, right side goes forward
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('button, .spotify-embed, .vinyl-record, .audio-controls-container')) {
+                const rect = e.target.getBoundingClientRect();
+                const clickX = e.clientX;
+                const screenWidth = window.innerWidth;
+                
+                if (clickX < screenWidth / 2) {
+                    // Left side - go back
+                    prevSection();
+                } else {
+                    // Right side - go forward
+                    nextSection();
+                }
+            }
+        });
+
+        // Details functionality for both coffee and event sections
+        function setupDetailsHandlers() {
+            // See Details buttons for coffee
+            document.querySelectorAll('.see-details-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const coffeeIndex = btn.dataset.coffee;
+                    const modal = document.getElementById(`coffeeModal${coffeeIndex}`);
+                    console.log('Button clicked, coffee index:', coffeeIndex, 'Modal found:', !!modal);
+                    if (modal) {
+                        // Move modal to body to escape horizontal scroll container
+                        if (modal.parentElement !== document.body) {
+                            document.body.appendChild(modal);
+                        }
+                        
+                        modal.classList.add('active');
+                        console.log('Modal activated');
+                        
+                        const content = modal.querySelector('.section-content');
+                        if (content) {
+                            console.log('Modal content preview:', content.textContent.substring(0, 100));
+                            // Force center positioning
+                            content.style.position = 'fixed';
+                            content.style.left = '50%';
+                            content.style.top = '50%';
+                            content.style.transform = 'translate(-50%, -50%)';
+                            content.style.zIndex = '10001';
+                        }
+                        
+                        pauseProgress();
+                    }
+                });
+            });
+            
+            // See More button for event
+            const eventDetailsBtn = document.getElementById('eventDetailsBtn');
+            const eventModal = document.getElementById('eventModal');
+            const eventCloseBtn = document.getElementById('eventCloseBtn');
+            
+            if (eventDetailsBtn && eventModal) {
+                eventDetailsBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    eventModal.classList.add('active');
+                    pauseProgress();
+                });
+            }
+            
+            if (eventCloseBtn && eventModal) {
+                eventCloseBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    eventModal.classList.remove('active');
+                    resumeProgress();
+                });
+                
+                eventModal.addEventListener('click', (e) => {
+                    if (e.target === eventModal) {
+                        eventModal.classList.remove('active');
+                        resumeProgress();
+                    }
+                });
+            }
+            
+            // Close buttons for coffee modals
+            document.querySelectorAll('.details-close-btn').forEach(btn => {
+                if (btn.id !== 'eventCloseBtn') {
+                    btn.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        const modalIndex = btn.dataset.modal;
+                        const modal = document.getElementById(`coffeeModal${modalIndex}`);
+                        if (modal) {
+                            modal.classList.remove('active');
+                            resumeProgress();
+                        }
+                    });
+                }
+            });
+            
+            // Click outside to close coffee modals
+            document.querySelectorAll('.coffee-details-modal').forEach(modal => {
+                modal.addEventListener('click', (e) => {
+                    if (e.target === modal) {
+                        modal.classList.remove('active');
+                        resumeProgress();
+                    }
+                });
+            });
+        }
+        
+        function setupMemberProfileLinks() {
+            const memberAvatar = document.getElementById('memberAvatar');
+            const memberWebsite = document.getElementById('memberWebsite');
+            const memberInstagram = document.getElementById('memberInstagram');
+            const workThumbnails = document.querySelectorAll('.work-thumbnail');
+            
+            if (memberAvatar) {
+                memberAvatar.addEventListener('click', () => {
+                    // Open collaborators page - replace with actual URL
+                    window.open('https://yourdomain.com/collaborators', '_blank');
+                });
+            }
+            
+            if (memberWebsite) {
+                memberWebsite.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    // Open member's portfolio - replace with actual URL
+                    window.open('https://whitneychen.photography', '_blank');
+                });
+            }
+            
+            if (memberInstagram) {
+                memberInstagram.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    // Open Instagram profile
+                    window.open('https://instagram.com/whitney_lens', '_blank');
+                });
+            }
+            
+            // Add hover effects to work thumbnails
+            workThumbnails.forEach(thumbnail => {
+                thumbnail.addEventListener('click', () => {
+                    // Could open larger view or portfolio
+                    window.open('https://whitneychen.photography', '_blank');
+                });
+            });
+        }
+        
+        function triggerSpotifyPlaylist() {
+            console.log('🎵 Triggering Spotify playlist auto-play...');
+            
+            const spotifyEmbed = document.getElementById('spotifyEmbed');
+            const playlistSection = document.querySelector('.playlist-section');
+            
+            if (!spotifyEmbed || !playlistSection) {
+                console.log('❌ Spotify embed or playlist section not found');
+                return;
+            }
+            
+            // Method 1: Try to programmatically interact with iframe
+            try {
+                spotifyEmbed.focus();
+                
+                // Simulate click on the iframe to potentially trigger autoplay
+                const clickEvent = new MouseEvent('click', {
+                    view: window,
+                    bubbles: true,
+                    cancelable: true
+                });
+                spotifyEmbed.dispatchEvent(clickEvent);
+                
+                console.log('✅ Attempted iframe interaction');
+            } catch (error) {
+                console.log('⚠️ Iframe interaction failed:', error.message);
+            }
+            
+            // Method 2: Force reload the iframe with autoplay parameters
+            setTimeout(() => {
+                const currentSrc = spotifyEmbed.src;
+                if (!currentSrc.includes('autoplay=1')) {
+                    console.log('🔄 Reloading Spotify embed with autoplay...');
+                    spotifyEmbed.src = currentSrc; // Reload with autoplay already in URL
+                }
+            }, 100);
+            
+            // Method 3: Add a prominent auto-play button overlay
+            if (!playlistSection.querySelector('.auto-play-btn')) {
+                const playBtn = document.createElement('button');
+                playBtn.className = 'start-button auto-play-btn';
+                playBtn.textContent = appConfig?.spotify?.playButton || '▶ Tap to Play Spotify';
+                // Position button exactly over Spotify's play button area
+                const spotifyRect = spotifyEmbed.getBoundingClientRect();
+                playBtn.style.cssText = `
+                    position: absolute;
+                    bottom: 50%;
+                    left: 50%;
+                    transform: translate(-50%, 50%);
+                    z-index: 1000;
+                    animation: pulse 2s infinite;
+                    background: linear-gradient(135deg, #1DB954, #1ed760);
+                    font-size: 1.2rem;
+                    padding: 1.2rem 2rem;
+                    box-shadow: 0 6px 20px rgba(29, 185, 84, 0.4);
+                    cursor: pointer;
+                `;
+                
+                // Add pulsing animation
+                const style = document.createElement('style');
+                style.textContent = `
+                    @keyframes pulse {
+                        0% { transform: translate(-50%, -50%) scale(1); }
+                        50% { transform: translate(-50%, -50%) scale(1.05); }
+                        100% { transform: translate(-50%, -50%) scale(1); }
+                    }
+                `;
+                document.head.appendChild(style);
+                
+                playBtn.addEventListener('click', () => {
+                    console.log('🎵 Play button clicked - attempting Spotify start');
+                    
+                    // Method 1: Focus the iframe
+                    spotifyEmbed.focus();
+                    
+                    // Method 2: Click at the center of the Spotify iframe where play button usually is
+                    const rect = spotifyEmbed.getBoundingClientRect();
+                    const centerX = rect.left + rect.width / 2;
+                    const centerY = rect.top + rect.height / 2;
+                    
+                    // Create click event at the center
+                    const clickEvent = new MouseEvent('click', {
+                        view: window,
+                        bubbles: true,
+                        cancelable: true,
+                        clientX: centerX,
+                        clientY: centerY
+                    });
+                    
+                    spotifyEmbed.dispatchEvent(clickEvent);
+                    
+                    // Method 3: Try to click slightly above center (where Spotify's big play button is)
+                    const playButtonY = rect.top + (rect.height * 0.4);
+                    const playClickEvent = new MouseEvent('click', {
+                        view: window,
+                        bubbles: true,
+                        cancelable: true,
+                        clientX: centerX,
+                        clientY: playButtonY
+                    });
+                    
+                    setTimeout(() => {
+                        spotifyEmbed.dispatchEvent(playClickEvent);
+                    }, 100);
+                    
+                    // Hide our overlay button after click attempts
+                    playBtn.style.opacity = '0';
+                    setTimeout(() => {
+                        playBtn.remove();
+                    }, 300);
+                });
+                
+                playlistSection.style.position = 'relative';
+                playlistSection.appendChild(playBtn);
+                
+                console.log('✅ Added manual play button overlay');
+                
+                // Method 5: AUTO-CLICK the button after a short delay to bypass autoplay restrictions
+                setTimeout(() => {
+                    console.log('🤖 Auto-clicking play button to start Spotify...');
+                    
+                    // Check if button still exists and is visible
+                    if (playBtn && playBtn.parentNode && getComputedStyle(playBtn).display !== 'none') {
+                        // Simulate a realistic click event
+                        const clickEvent = new MouseEvent('click', {
+                            view: window,
+                            bubbles: true,
+                            cancelable: true,
+                            button: 0
+                        });
+                        
+                        playBtn.dispatchEvent(clickEvent);
+                        console.log('✅ Auto-click executed');
+                    } else {
+                        console.log('⚠️ Play button not available for auto-click');
+                    }
+                }, 1000); // Wait 1 second after button creation, then auto-click
+            }
+            
+            // Method 4: Try posting message to iframe (if same origin, which it won't be)
+            try {
+                spotifyEmbed.contentWindow.postMessage('play', '*');
+                console.log('✅ Attempted postMessage to iframe');
+            } catch (error) {
+                console.log('⚠️ PostMessage failed (expected for cross-origin):', error.message);
+            }
+        }
+        
+            // Initialize message container components
+            function initializeMessageInterface() {
+                // Create initial mini waveform
+                if (audioWaveformMini) {
+                    createMiniWaveform();
+                }
+                
+                // Set initial audio duration if available
+                if (audioPlayer && audioPlayer.duration && audioDuration) {
+                    audioDuration.textContent = formatTime(audioPlayer.duration);
+                }
+            }
+            
+            // Initialize
+            setupDetailsHandlers();
+            setupMemberProfileLinks();
+            updateView();
+            initializeMessageInterface();
+            
+            // Start with hidden audio controls - will show on Start Journey
+            setupAudioVisualization();
+            
+            // Start waveform animation immediately
+            function startWaveformAnimation() {
+                drawWaveform();
+                requestAnimationFrame(startWaveformAnimation);
+            }
+            startWaveformAnimation();
+            
+            console.log('App initialized, startButton:', startButton);
+            
+            // Apply configuration AFTER all other initialization is complete
+            setTimeout(() => {
+                console.log('🔧 Applying JSON configuration after full initialization...');
+                applyConfiguration();
+            }, 500); // Longer delay to ensure everything else is done
+        }
+    </script>
+</body>
+</html>
