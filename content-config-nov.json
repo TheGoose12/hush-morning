@@ -1,7 +1,7 @@
 {
   "app": {
-    "title": "Home Drip Session ",
-    "subtitle": "December coming soon!",
+    "title": "Home Drip Session",
+    "subtitle": "November Member Notes",
     "audio": {
       "file": "Nov-Hush-Vox.m4a",
       "duration": "1:35"
@@ -17,7 +17,7 @@
     "messages": [
       {
         "type": "text",
-        "content": "Hey! Come back in 1 day and we'll have December session live!"
+        "content": "Hi hello! This is an audio message from Adam and Ron."
       },
       {
         "type": "audio",
@@ -30,14 +30,14 @@
       "id": "regular",
       "label": "Regular But Better",
       "name": "Hush Blend",
-      "origin": "Colombian/Guatemalan or Colombian/Ethiopian",
-      "originBrief": "Colombian/Guatemalan or Colombian/Ethiopian",
-      "notesBrief": "Chocolate-Covered Hazelnut • Caramel • Balanced Body • Ethiopian adds brightness",
+      "origin": "Colombian/Guatemalan",
+      "originBrief": "Colombian/Guatemalan",
+      "notesBrief": "Chocolate-Covered Hazelnut • Caramel • Balanced Body",
       "heroImage": "assets/regular-bg.jpeg",
       "backgroundImage": "assets/regular-bg.jpeg",
       "descriptors": ["Chocolate-Covered Hazelenut", "Carmael", "Balanced Body"],
       "details": {
-        "subtitle": "We shipped two versions this month!",
+        "subtitle": "Two coffee origins, one quiet moment in your mug.",
         "description": "Made for balance and a touch of sweetness. We pull together our favorite fresh-harvest coffees from Central + South America to create a cup that’s smooth, gently bright, and easy to love.",
         "characteristics": {
           "Processing": "Washed",
@@ -57,23 +57,23 @@
     {
       "id": "aha",
       "label": "Aha Coffee",
-      "name": "Ethiopia Supernatural",
-      "origin": ".Ethiopia’s Gedeo Zone: a narrow section of plateau dense with savvy farmers.",
-      "originBrief": "This microlot, fresh coffee cherry is sealed into carbon fiber drums and left to ferment anaerobically (deprived of fresh oxygen) between 7 to 10 full days.",
-      "notesBrief": "Strawberry jam • apricot • hibiscus • baking spice • heavy cream",
+      "name": "Costa Rica Natural – Finca Santa Rosa",
+      "origin": "From Single a Farmer Bryan Rivera",
+      "originBrief": "León Cortés Canton · Family farm ~4 hectares (≈10 acres) · Processed at Café de Altura de San Ramón",
+      "notesBrief": "Lemongrass • strawberry • lavender • cranberry • raspberry",
       "heroImage": "assets/aha-bg.png",
       "backgroundImage": "assets/aha-bg.png",
-      "descriptors": ["Strawberry", "Apricot", "Hibiscus", "Baking Spice"],
+      "descriptors": ["Lemongrass", "Strawberry", "Lavender", "Cranberry"],
       "details": {
-        "subtitle": "Explosive natural from smallholders in Chelchele, Gedeb",
-        "description": "Grind slightly finer with a moderate dose on a flat-bottom dripper to amplify the perfume-like fruit and balanced sweetness.",
+        "subtitle": "Single-farmer microlot from a 10-acre family farm",
+        "description": "Brew slightly finer with a moderate dose on a flat-bottom dripper to highlight bright fruit and balanced sweetness.",
         "characteristics": {
-          "Processing": "Carbonic natural (anaerobic in sealed drums)",
-          "Altitude": "High-elevation smallholder plots — among the highest in Ethiopia",
-          "Varietals": "Heirloom landraces",
-          "Flavor Notes": "Perfumed berries, raspberry candy, strawberry-lavender, citrus pop, and a syrupy tropical finish"
+          "Processing": "Natural (minimal intervention)",
+          "Altitude": "—",
+          "Varietals": "Bourbon",
+          "Flavor Notes": "Dark berries, blackberry lemonade, orange zest, hazelnut; plus lemongrass, strawberry, lavender, cranberry, raspberry"
         },
-        "story": "This lot comes from smallholders in Chelchele, part of Ethiopia’s Gedeb district—an area revered for its explosive naturals and aromatic intensity. Gedeb borders Guji, and its profiles stretch beyond classic Yirgacheffe: expect high-elevation clarity, fruit-forward sparkle, and a perfume-like lift unique to this corner of Gedeo.\n\nThe coffee was processed by EDN Ethiopian Coffee at their Chelchele site, where more than 200 seasonal workers rotate cherry, sort meticulously, and manage the long natural-drying cycle. EDN prefinances farmers and supports staff with meals, lodging, and education—an approach that builds loyalty and stability in a highly competitive region.\n\nFor this microlot, ripe cherry is sorted, floated, and sealed in carbon-fiber drums for 7–10 days of cool anaerobic fermentation. The slow, oxygen-free environment deepens fruit sugars without tipping into over-fermentation. Post-ferment, the syrupy cherry mass dries gradually on raised beds before resting in cool storage to stabilize sweetness and extend longevity.\n\nThe result is a vibrant, fruit-saturated cup with berry perfume, candy-like acidity, and a soft, syrupy finish.\n\nBrew a touch finer to catch the full glow.\n\nSip slow."
+        "story": "In the Tarrazú mountains of Costa Rica, producer Bryan Rivera Ureña tends a small family farm—about four hectares—called Finca Santa Rosa. His Bourbon cherries are dried naturally with a light touch, letting the fruit lead.\n\nThe cup shows lush, structured fruit: dark berries, blackberry lemonade, orange zest, and a gentle hazelnut finish—lively as espresso and soft like a strawberry–plum milkshake with milk.\n\nCherry is cleaned and moved to greenhouse patios where slow, even airflow stretches drying to nearly a month. Once at ideal humidity, the coffee rests for at least six weeks to stabilize and deepen sweetness.\n\nOur roast approach stays steady and unhurried—less burner energy and extended drying/Maillard to unlock deeper fruit and caramel.\n\nBrew it a touch finer on a flat-bottom dripper with a moderate dose to catch the full expression.\n\nSip slow."
       },
       "gallery": [
         "assets/aha-1.jpg",
@@ -111,15 +111,15 @@
     ],
     "stats": [
       {
-        "number": "126",
+        "number": "110",
         "label": "Members"
       },
       {
-        "number": "3",
+        "number": "5",
         "label": "Origins"
       },
       {
-        "number": "5",
+        "number": "6",
         "label": "Events"
       }
     ],
