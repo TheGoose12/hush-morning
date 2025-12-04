@@ -1,10 +1,10 @@
 {
   "app": {
     "title": "Home Drip Session ",
-    "subtitle": "December coming soon!",
+    "subtitle": "Hello December!",
     "audio": {
-      "file": "Nov-Hush-Vox.m4a",
-      "duration": "1:35"
+      "file": "Dec-Hush-Vox.m4a",
+      "duration": "3:09"
     },
     "userPhoto": "user-photo.jpg",
     "vinylBackground": "record-bg.png",
@@ -17,11 +17,11 @@
     "messages": [
       {
         "type": "text",
-        "content": "Hey! Come back in 1 day and we'll have December session live!"
+        "content": "Hey! Welcome to the December Drip Session!"
       },
       {
         "type": "audio",
-        "duration": "1:35"
+        "duration": "3:09"
       }
     ]
   },
